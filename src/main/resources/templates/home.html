@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fórum Online</title>
+  </head>
+
+  <body>
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <a class="brand" href="#" aria-label="Voltar para o início">
+          <span class="brand__icon" a<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fórum Online</title>
+  </head>
+
+  <body>
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <a class="brand" href="#" aria-label="Voltar para o início">
+          <span class="brand__icon" aria-hidden="true">↩</span>
+          <span class="brand__name">FórumOnline</span>
+        </a>
+
+        <nav class="nav" aria-label="Navegação principal">
+          <a class="nav__link is-active" href="#">Início</a>
+          <a class="nav__link" href="#">Categorias</a>
+          <a class="nav__link" href="#">Chats</a>
+          <a class="nav__link" href="#">Meu Perfil</a>
+        </nav>
+      </div>
+
+      <div class="topbar__right">
+        <a class="btn btn--primary" href="#">Criar Novo Tópico</a>
+        <button class="icon-btn" type="button" aria-label="Mensagens">💬</button>
+        <button class="icon-btn" type="button" aria-label="Notificações">🔔</button>
+        <button class="avatar-btn" type="button" aria-label="Menu do usuário">
+          <span class="avatar" aria-hidden="true">👤</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Conteúdo -->
+    <main class="container">
+      <section class="layout">
+        <!-- Coluna esquerda -->
+        <div class="layout__main">
+          <header class="page-header">
+            <h1>Tópicos Populares e Recentes</h1>
+          </header>
+
+          <section class="topics-grid" aria-label="Lista de tópicos populares">
+            <!-- Card 1 -->
+            <article class="topic-card">
+              <a class="topic-card__category" href="#">Desenvolvimento Web</a>
+              <h2 class="topic-card__title">
+                <a href="#">Qual o melhor framework para iniciantes em 2024?</a>
+              </h2>
+              <div class="topic-card__meta">
+                <span>32 postagens</span>
+                <span>última há 5min</span>
+              </div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="topic-card">
+              <a class="topic-card__category" href="#">Games</a>
+              <h2 class="topic-card__title">
+                <a href="#">Lançamentos mais esperados para o próximo semestre</a>
+              </h2>
+              <div class="topic-card__meta">
+                <span>112 postagens</span>
+                <span>última há 22min</span>
+              </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="topic-card">
+              <a class="topic-card__category" href="#">Hardware</a>
+              <h2 class="topic-card__title">
+                <a href="#">RTX 4070 Super vs RX 7800 XT: qual vale mais a pena?</a>
+              </h2>
+              <div class="topic-card__meta">
+                <span>67 postagens</span>
+                <span>última há 1h</span>
+              </div>
+            </article>
+
+            <!-- Card 4 -->
+            <article class="topic-card">
+              <a class="topic-card__category" href="#">Carreiras</a>
+              <h2 class="topic-card__title">
+                <a href="#">Como se preparar para entrevistas técnicas em grandes empresas?</a>
+              </h2>
+              <div class="topic-card__meta">
+                <span>45 postagens</span>
+                <span>última há 3h</span>
+              </div>
+            </article>
+          </section>
+
+          <section class="realtime-chats" aria-label="Chats em tempo real">
+            <h2>Chats em Tempo Real</h2>
+
+            <div class="chat-list">
+              <!-- Chat 1 -->
+              <article class="chat-card">
+                <div class="chat-card__left">
+                  <span class="chat-card__icon" aria-hidden="true">⌁⌁</span>
+                  <div class="chat-card__info">
+                    <h3 class="chat-card__title">
+                      <a href="#">Desenvolvedores React</a>
+                    </h3>
+                    <p class="chat-card__subtitle">Tópico: Hooks e State Management</p>
+                  </div>
+                </div>
+
+                <div class="chat-card__right">
+                  <span class="chat-card__status">
+                    <span class="dot" aria-hidden="true">●</span>
+                    <span>23 Online</span>
+                  </span>
+                  <a class="btn" href="#">Entrar</a>
+                </div>
+              </article>
+
+              <!-- Chat 2 -->
+              <article class="chat-card">
+                <div class="chat-card__left">
+                  <span class="chat-card__icon" aria-hidden="true">🎮</span>
+                  <div class="chat-card__info">
+                    <h3 class="chat-card__title">
+                      <a href="#">Gamers de Plantão</a>
+                    </h3>
+                    <p class="chat-card__subtitle">Conversa livre sobre jogos</p>
+                  </div>
+                </div>
+
+                <div class="chat-card__right">
+                  <span class="chat-card__status">
+                    <span class="dot" aria-hidden="true">●</span>
+                    <span>42 Online</span>
+                  </span>
+                  <a class="btn" href="#">Entrar</a>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <!-- Coluna direita -->
+        <aside class="layout__aside" aria-label="Barra lateral">
+          <section class="search">
+            <form action="#" method="get">
+              <label class="sr-only" for="q">Pesquisar</label>
+              <input id="q" name="q" type="search" placeholder="Procure um tópico ou chat..." />
+            </form>
+          </section>
+
+          <section class="sidebar-card" aria-label="Em alta">
+            <h2>Em Alta</h2>
+            <ul class="sidebar-list">
+              <li><a href="#">Como o AI está mudando o mercado de trabalho?</a></li>
+              <li><a href="#">Dicas para otimizar builds de PC em 2024</a></li>
+              <li><a href="#">Melhores práticas de segurança para aplicações Node.js</a></li>
+            </ul>
+          </section>
+
+          <section class="sidebar-card" aria-label="Usuários ativos">
+            <h2>Usuários Ativos</h2>
+            <ul class="users">
+              <li class="user">
+                <span class="user__avatar" aria-hidden="true">🙂</span>
+                <span class="user__name">Carlos Silva</span>
+              </li>
+              <li class="user">
+                <span class="user__avatar" aria-hidden="true">🙂</span>
+                <span class="user__name">Ana Pereira</span>
+              </li>
+              <li class="user">
+                <span class="user__avatar" aria-hidden="true">🙂</span>
+                <span class="user__name">João Martins</span>
+              </li>
+            </ul>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+      <div class="footer__left">
+        <small>© 2024 Fórum Online. Todos os direitos reservados.</small>
+      </div>
+      <nav class="footer__right" aria-label="Links do rodapé">
+        <a href="#">Sobre</a>
+        <a href="#">Ajuda</a>
+        <a href="#">Termos</a>
+        <a href="#">Privacidade</a>
+      </nav>
+    </footer>
+  </body>
+</html>
+ria-hidden="true">↩</span>
+          <span class="brand__name">FórumOnline</span>
+        </a>
+
+        <nav class="nav" aria-label="Navegação principal">
+          <a class="nav__link is-active" href="#">Início</a>
+          <a class="nav__link" href="#">Categorias</a>
+          <a class="nav__link" href="#">Chats</a>
+          <a class="nav__link" href="#">Meu Perfil</a>
+        </nav>
+      </div>
+
+      <div class="topbar__right">
+        <a class="btn btn--primary" href="#">Criar Novo Tópico</a>
+        <button class="icon-btn" type="button" aria-label="Mensagens">💬</button>
+        <button class="icon-btn" type="button" aria-label="Notificações">🔔</button>
+        <button class="avatar-btn" type="button" aria-label="Menu do usuário">
+          <span class="avatar" aria-hidden="true">👤</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Conteúdo -->
+    <main class="container">
+      <section class="layout">
+        <!-- Coluna esquerda -->
+        <div class="layout__main">
+          <header class="page-header">
+            <h1>Tópicos Populares e Recentes</h1>
+          </header>
+
+          <section class="topics-grid" aria-label="Lista de tópicos populares">
+            <!-- Card 1 -->
+            <article class="topic-card">
+              <a class="topic-card__category" href="#">Desenvolvimento Web</a>
+              <h2 class="topic-card__title">
+                <a href="#">Qual o melhor framework para iniciantes em 2024?</a>
+              </h2>
+              <div class="topic-card__meta">
+                <span>32 postagens</span>
+                <span>última há 5min</span>
+              </div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="topic-card">
+              <a class="topic-card__category" href="#">Games</a>
+              <h2 class="topic-card__title">
+                <a href="#">Lançamentos mais esperados para o próximo semestre</a>
+              </h2>
+              <div class="topic-card__meta">
+                <span>112 postagens</span>
+                <span>última há 22min</span>
+              </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="topic-card">
+              <a class="topic-card__category" href="#">Hardware</a>
+              <h2 class="topic-card__title">
+                <a href="#">RTX 4070 Super vs RX 7800 XT: qual vale mais a pena?</a>
+              </h2>
+              <div class="topic-card__meta">
+                <span>67 postagens</span>
+                <span>última há 1h</span>
+              </div>
+            </article>
+
+            <!-- Card 4 -->
+            <article class="topic-card">
+              <a class="topic-card__category" href="#">Carreiras</a>
+              <h2 class="topic-card__title">
+                <a href="#">Como se preparar para entrevistas técnicas em grandes empresas?</a>
+              </h2>
+              <div class="topic-card__meta">
+                <span>45 postagens</span>
+                <span>última há 3h</span>
+              </div>
+            </article>
+          </section>
+
+          <section class="realtime-chats" aria-label="Chats em tempo real">
+            <h2>Chats em Tempo Real</h2>
+
+            <div class="chat-list">
+              <!-- Chat 1 -->
+              <article class="chat-card">
+                <div class="chat-card__left">
+                  <span class="chat-card__icon" aria-hidden="true">⌁⌁</span>
+                  <div class="chat-card__info">
+                    <h3 class="chat-card__title">
+                      <a href="#">Desenvolvedores React</a>
+                    </h3>
+                    <p class="chat-card__subtitle">Tópico: Hooks e State Management</p>
+                  </div>
+                </div>
+
+                <div class="chat-card__right">
+                  <span class="chat-card__status">
+                    <span class="dot" aria-hidden="true">●</span>
+                    <span>23 Online</span>
+                  </span>
+                  <a class="btn" href="#">Entrar</a>
+                </div>
+              </article>
+
+              <!-- Chat 2 -->
+              <article class="chat-card">
+                <div class="chat-card__left">
+                  <span class="chat-card__icon" aria-hidden="true">🎮</span>
+                  <div class="chat-card__info">
+                    <h3 class="chat-card__title">
+                      <a href="#">Gamers de Plantão</a>
+                    </h3>
+                    <p class="chat-card__subtitle">Conversa livre sobre jogos</p>
+                  </div>
+                </div>
+
+                <div class="chat-card__right">
+                  <span class="chat-card__status">
+                    <span class="dot" aria-hidden="true">●</span>
+                    <span>42 Online</span>
+                  </span>
+                  <a class="btn" href="#">Entrar</a>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <!-- Coluna direita -->
+        <aside class="layout__aside" aria-label="Barra lateral">
+          <section class="search">
+            <form action="#" method="get">
+              <label class="sr-only" for="q">Pesquisar</label>
+              <input id="q" name="q" type="search" placeholder="Procure um tópico ou chat..." />
+            </form>
+          </section>
+
+          <section class="sidebar-card" aria-label="Em alta">
+            <h2>Em Alta</h2>
+            <ul class="sidebar-list">
+              <li><a href="#">Como o AI está mudando o mercado de trabalho?</a></li>
+              <li><a href="#">Dicas para otimizar builds de PC em 2024</a></li>
+              <li><a href="#">Melhores práticas de segurança para aplicações Node.js</a></li>
+            </ul>
+          </section>
+
+          <section class="sidebar-card" aria-label="Usuários ativos">
+            <h2>Usuários Ativos</h2>
+            <ul class="users">
+              <li class="user">
+                <span class="user__avatar" aria-hidden="true">🙂</span>
+                <span class="user__name">Carlos Silva</span>
+              </li>
+              <li class="user">
+                <span class="user__avatar" aria-hidden="true">🙂</span>
+                <span class="user__name">Ana Pereira</span>
+              </li>
+              <li class="user">
+                <span class="user__avatar" aria-hidden="true">🙂</span>
+                <span class="user__name">João Martins</span>
+              </li>
+            </ul>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+      <div class="footer__left">
+        <small>© 2024 Fórum Online. Todos os direitos reservados.</small>
+      </div>
+      <nav class="footer__right" aria-label="Links do rodapé">
+        <a href="#">Sobre</a>
+        <a href="#">Ajuda</a>
+        <a href="#">Termos</a>
+        <a href="#">Privacidade</a>
+      </nav>
+    </footer>
+  </body>
+</html>

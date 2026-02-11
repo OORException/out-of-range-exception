@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/v1")
-public class RestMainApiController {
+public class RestHomeApiController {
     
-    @GetMapping("/")
-    public ResponseEntity<String> getApiMain() {
-        return ResponseEntity.ok("Bem vindo a API REST do WebDev");
+    @GetMapping("/home")
+    public ResponseEntity<String> getApiHome() {
+        return ResponseEntity.ok("esta é a home da API REST do WebDev");
     }
     
 
