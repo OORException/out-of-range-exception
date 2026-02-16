@@ -34,7 +34,7 @@ A aplicação estará disponível em: **http://localhost:8080**
 
 ### Primeiros Passos
 
-1. Registre um usuário via `POST /api/auth/register`
+1. Registre um usuário via `POST /api/v1/auth/register`
 2. Crie categorias e tags (como admin)
 3. Crie seu primeiro tópico
 4. Comece a interagir!
@@ -146,53 +146,53 @@ src/main/java/br/edu/iff/ccc/webdev/
 ## Endpoints por Módulo
 
 ### Autenticação
-- POST `/api/auth/register` - Registrar usuário
-- POST `/api/auth/login` - Fazer login
+- POST `/api/v1/auth/register` - Registrar usuário
+- POST `/api/v1/auth/login` - Fazer login
 
 ### Usuários
-- GET `/api/users` - Listar usuários
-- GET `/api/users/{id}` - Buscar usuário
+- GET `/api/v1/users` - Listar usuários
+- GET `/api/v1/users/{id}` - Buscar usuário
 
 ### Categorias
-- GET `/api/categories` - Listar categorias
-- GET `/api/categories/{id}` - Buscar categoria
+- GET `/api/v1/categories` - Listar categorias
+- GET `/api/v1/categories/{id}` - Buscar categoria
 
 ### Tags
-- GET `/api/tags` - Listar tags
-- GET `/api/tags/{id}` - Buscar tag
+- GET `/api/v1/tags` - Listar tags
+- GET `/api/v1/tags/{id}` - Buscar tag
 
 ### Tópicos
-- POST `/api/topics` - Criar tópico
-- GET `/api/topics` - Listar tópicos
-- GET `/api/topics/{id}` - Buscar tópico
+- POST `/api/v1/topics` - Criar tópico
+- GET `/api/v1/topics` - Listar tópicos
+- GET `/api/v1/topics/{id}` - Buscar tópico
 
 ### Posts
-- POST `/api/posts` - Criar post
-- GET `/api/posts/{id}` - Buscar post
-- GET `/api/posts/topic/{topicId}` - Listar posts do tópico
-- PATCH `/api/posts/{id}` - Editar post
-- DELETE `/api/posts/{id}` - Deletar post
+- POST `/api/v1/posts` - Criar post
+- GET `/api/v1/posts/{id}` - Buscar post
+- GET `/api/v1/posts/topic/{topicId}` - Listar posts do tópico
+- PATCH `/api/v1/posts/{id}` - Editar post
+- DELETE `/api/v1/posts/{id}` - Deletar post
 
 ### Likes
-- POST `/api/posts/{postId}/likes` - Curtir post
-- DELETE `/api/posts/{postId}/likes` - Descurtir post
-- GET `/api/posts/{postId}/likes/count` - Contar likes
+- POST `/api/v1/posts/{postId}/likes` - Curtir post
+- DELETE `/api/v1/posts/{postId}/likes` - Descurtir post
+- GET `/api/v1/posts/{postId}/likes/count` - Contar likes
 
 ### Chats
-- POST `/api/chats/topic/{topicId}` - Criar chat
-- GET `/api/chats/{id}` - Buscar chat
-- GET `/api/chats/{id}/messages` - Listar mensagens
-- POST `/api/chats/{id}/messages` - Enviar mensagem
-- POST `/api/chats/{id}/participants/join` - Entrar no chat
-- POST `/api/chats/{id}/participants/leave` - Sair do chat
+- POST `/api/v1/chats/topic/{topicId}` - Criar chat
+- GET `/api/v1/chats/{id}` - Buscar chat
+- GET `/api/v1/chats/{id}/messages` - Listar mensagens
+- POST `/api/v1/chats/{id}/messages` - Enviar mensagem
+- POST `/api/v1/chats/{id}/participants/join` - Entrar no chat
+- POST `/api/v1/chats/{id}/participants/leave` - Sair do chat
 
 ### Administração
-- POST `/api/admin/categories` - Criar categoria
-- PUT `/api/admin/categories/{id}` - Atualizar categoria
-- DELETE `/api/admin/categories/{id}` - Deletar categoria
-- POST `/api/admin/tags` - Criar tag
-- PUT `/api/admin/tags/{id}` - Atualizar tag
-- DELETE `/api/admin/tags/{id}` - Deletar tag
+- POST `/api/v1/admin/categories` - Criar categoria
+- PUT `/api/v1/admin/categories/{id}` - Atualizar categoria
+- DELETE `/api/v1/admin/categories/{id}` - Deletar categoria
+- POST `/api/v1/admin/tags` - Criar tag
+- PUT `/api/v1/admin/tags/{id}` - Atualizar tag
+- DELETE `/api/v1/admin/tags/{id}` - Deletar tag
 
 **Total: 32 endpoints REST**
 

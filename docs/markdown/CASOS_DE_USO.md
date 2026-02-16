@@ -26,7 +26,7 @@ Jefferson é estudante de Ciência da Computação e está aprendendo Spring Boo
 
 #### Passo 1: Registrar no Sistema
 ```bash
-curl -X POST http://localhost:8080/api/auth/register \
+curl -X POST http://localhost:8080/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "username": "jefferson_dev",
@@ -50,7 +50,7 @@ curl -X POST http://localhost:8080/api/auth/register \
 
 #### Passo 2: Explorar Categorias Disponíveis
 ```bash
-curl http://localhost:8080/api/categories
+curl http://localhost:8080/api/v1/categories
 ```
 
 **Resposta:**
@@ -73,7 +73,7 @@ curl http://localhost:8080/api/categories
 
 #### Passo 3: Ver Tags Disponíveis
 ```bash
-curl http://localhost:8080/api/tags
+curl http://localhost:8080/api/v1/tags
 ```
 
 **Resposta:**
@@ -99,7 +99,7 @@ curl http://localhost:8080/api/tags
 
 #### Passo 4: Criar Novo Tópico
 ```bash
-curl -X POST http://localhost:8080/api/topics \
+curl -X POST http://localhost:8080/api/v1/topics \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
   -d '{
@@ -147,7 +147,7 @@ Maria é desenvolvedora sênior e viu a dúvida do Jefferson. Ela quer ajudar.
 
 #### Passo 1: Maria Faz Login
 ```bash
-curl -X POST http://localhost:8080/api/auth/login \
+curl -X POST http://localhost:8080/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "username": "maria_senior",
@@ -157,12 +157,12 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 #### Passo 2: Visualizar o Tópico
 ```bash
-curl http://localhost:8080/api/topics/42
+curl http://localhost:8080/api/v1/topics/42
 ```
 
 #### Passo 3: Ver Posts Existentes
 ```bash
-curl http://localhost:8080/api/posts/topic/42
+curl http://localhost:8080/api/v1/posts/topic/42
 ```
 
 **Resposta:**
@@ -181,7 +181,7 @@ curl http://localhost:8080/api/posts/topic/42
 
 #### Passo 4: Maria Responde com Solução Detalhada
 ```bash
-curl -X POST http://localhost:8080/api/posts \
+curl -X POST http://localhost:8080/api/v1/posts \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DA_MARIA" \
   -d '{
@@ -204,13 +204,13 @@ curl -X POST http://localhost:8080/api/posts \
 
 #### Passo 5: Jefferson Curte a Resposta
 ```bash
-curl -X POST http://localhost:8080/api/posts/86/likes \
+curl -X POST http://localhost:8080/api/v1/posts/86/likes \
   -H "Authorization: Bearer TOKEN_DO_JEFFERSON"
 ```
 
 #### Passo 6: Jefferson Agradece
 ```bash
-curl -X POST http://localhost:8080/api/posts \
+curl -X POST http://localhost:8080/api/v1/posts \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DO_JEFFERSON" \
   -d '{
@@ -233,7 +233,7 @@ Carlos é administrador do fórum e precisa criar novas categorias e tags para o
 
 #### Passo 1: Criar Nova Categoria
 ```bash
-curl -X POST http://localhost:8080/api/admin/categories \
+curl -X POST http://localhost:8080/api/v1/admin/categories \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DO_ADMIN" \
   -d '{
@@ -245,19 +245,19 @@ curl -X POST http://localhost:8080/api/admin/categories \
 #### Passo 2: Criar Várias Tags
 ```bash
 # Tag 1
-curl -X POST http://localhost:8080/api/admin/tags \
+curl -X POST http://localhost:8080/api/v1/admin/tags \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DO_ADMIN" \
   -d '{"name": "Docker"}'
 
 # Tag 2
-curl -X POST http://localhost:8080/api/admin/tags \
+curl -X POST http://localhost:8080/api/v1/admin/tags \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DO_ADMIN" \
   -d '{"name": "Kubernetes"}'
 
 # Tag 3
-curl -X POST http://localhost:8080/api/admin/tags \
+curl -X POST http://localhost:8080/api/v1/admin/tags \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DO_ADMIN" \
   -d '{"name": "GitHub Actions"}'
@@ -265,7 +265,7 @@ curl -X POST http://localhost:8080/api/admin/tags \
 
 #### Passo 3: Atualizar Descrição de Categoria
 ```bash
-curl -X PUT http://localhost:8080/api/admin/categories/3 \
+curl -X PUT http://localhost:8080/api/v1/admin/categories/3 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DO_ADMIN" \
   -d '{
@@ -276,7 +276,7 @@ curl -X PUT http://localhost:8080/api/admin/categories/3 \
 
 #### Passo 4: Renomear Tag Incorreta
 ```bash
-curl -X PUT http://localhost:8080/api/admin/tags/15 \
+curl -X PUT http://localhost:8080/api/v1/admin/tags/15 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DO_ADMIN" \
   -d '{
@@ -298,7 +298,7 @@ Jefferson percebeu um erro no código que postou e quer corrigi-lo.
 
 #### Passo 1: Visualizar Post Atual
 ```bash
-curl http://localhost:8080/api/posts/87
+curl http://localhost:8080/api/v1/posts/87
 ```
 
 **Resposta:**
@@ -315,7 +315,7 @@ curl http://localhost:8080/api/posts/87
 
 #### Passo 2: Editar Post Corrigindo o Erro
 ```bash
-curl -X PATCH http://localhost:8080/api/posts/87 \
+curl -X PATCH http://localhost:8080/api/v1/posts/87 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DO_JEFFERSON" \
   -d '{
@@ -349,7 +349,7 @@ Vários usuários querem discutir em tempo real sobre um tópico específico.
 
 #### Passo 1: Admin Cria Chat para o Tópico
 ```bash
-curl -X POST http://localhost:8080/api/chats/topic/42 \
+curl -X POST http://localhost:8080/api/v1/chats/topic/42 \
   -H "Authorization: Bearer TOKEN_DO_ADMIN"
 ```
 
@@ -361,21 +361,21 @@ curl -X POST http://localhost:8080/api/chats/topic/42 \
 #### Passo 2: Usuários Entram no Chat
 ```bash
 # Jefferson entra
-curl -X POST http://localhost:8080/api/chats/1/participants/join \
+curl -X POST http://localhost:8080/api/v1/chats/1/participants/join \
   -H "Authorization: Bearer TOKEN_DO_JEFFERSON"
 
 # Maria entra
-curl -X POST http://localhost:8080/api/chats/1/participants/join \
+curl -X POST http://localhost:8080/api/v1/chats/1/participants/join \
   -H "Authorization: Bearer TOKEN_DA_MARIA"
 
 # Pedro entra
-curl -X POST http://localhost:8080/api/chats/1/participants/join \
+curl -X POST http://localhost:8080/api/v1/chats/1/participants/join \
   -H "Authorization: Bearer TOKEN_DO_PEDRO"
 ```
 
 #### Passo 3: Ver Informações do Chat
 ```bash
-curl http://localhost:8080/api/chats/1
+curl http://localhost:8080/api/v1/chats/1
 ```
 
 **Resposta:**
@@ -393,7 +393,7 @@ curl http://localhost:8080/api/chats/1
 #### Passo 4: Conversação no Chat
 ```bash
 # Jefferson pergunta
-curl -X POST http://localhost:8080/api/chats/1/messages \
+curl -X POST http://localhost:8080/api/v1/chats/1/messages \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DO_JEFFERSON" \
   -d '{
@@ -403,7 +403,7 @@ curl -X POST http://localhost:8080/api/chats/1/messages \
   }'
 
 # Maria responde (2 minutos depois)
-curl -X POST http://localhost:8080/api/chats/1/messages \
+curl -X POST http://localhost:8080/api/v1/chats/1/messages \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DA_MARIA" \
   -d '{
@@ -413,7 +413,7 @@ curl -X POST http://localhost:8080/api/chats/1/messages \
   }'
 
 # Pedro complementa
-curl -X POST http://localhost:8080/api/chats/1/messages \
+curl -X POST http://localhost:8080/api/v1/chats/1/messages \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN_DO_PEDRO" \
   -d '{
@@ -425,7 +425,7 @@ curl -X POST http://localhost:8080/api/chats/1/messages \
 
 #### Passo 5: Listar Todas as Mensagens
 ```bash
-curl http://localhost:8080/api/chats/1/messages
+curl http://localhost:8080/api/v1/chats/1/messages
 ```
 
 **Resposta:**
@@ -463,7 +463,7 @@ curl http://localhost:8080/api/chats/1/messages
 
 #### Passo 6: Pedro Sai do Chat
 ```bash
-curl -X POST http://localhost:8080/api/chats/1/participants/leave \
+curl -X POST http://localhost:8080/api/v1/chats/1/participants/leave \
   -H "Authorization: Bearer TOKEN_DO_PEDRO"
 ```
 
@@ -481,7 +481,7 @@ Ana é nova no fórum e quer encontrar tópicos sobre React.
 
 #### Passo 1: Listar Todas as Tags
 ```bash
-curl http://localhost:8080/api/tags
+curl http://localhost:8080/api/v1/tags
 ```
 
 #### Passo 2: Encontrar Tag "React"
@@ -496,7 +496,7 @@ curl http://localhost:8080/api/tags
 
 #### Passo 3: Listar Todos os Tópicos
 ```bash
-curl http://localhost:8080/api/topics
+curl http://localhost:8080/api/v1/topics
 ```
 
 #### Passo 4: Filtrar Tópicos por Categoria Frontend (ID 4)
@@ -506,17 +506,17 @@ curl http://localhost:8080/api/topics
 
 #### Passo 5: Acessar Tópico Específico
 ```bash
-curl http://localhost:8080/api/topics/28
+curl http://localhost:8080/api/v1/topics/28
 ```
 
 #### Passo 6: Ver Todas as Respostas
 ```bash
-curl http://localhost:8080/api/posts/topic/28
+curl http://localhost:8080/api/v1/posts/topic/28
 ```
 
 #### Passo 7: Ver Quantas Curtidas um Post Tem
 ```bash
-curl http://localhost:8080/api/posts/145/likes/count
+curl http://localhost:8080/api/v1/posts/145/likes/count
 ```
 
 **Resposta:**
@@ -544,19 +544,19 @@ SELECT id FROM posts WHERE author_id = 8;
 #### Passo 2: Contar Likes de Cada Post
 ```bash
 # Post 86
-curl http://localhost:8080/api/posts/86/likes/count
+curl http://localhost:8080/api/v1/posts/86/likes/count
 # Retorna: 15
 
 # Post 92
-curl http://localhost:8080/api/posts/92/likes/count
+curl http://localhost:8080/api/v1/posts/92/likes/count
 # Retorna: 8
 
 # Post 103
-curl http://localhost:8080/api/posts/103/likes/count
+curl http://localhost:8080/api/v1/posts/103/likes/count
 # Retorna: 23
 
 # Post 117
-curl http://localhost:8080/api/posts/117/likes/count
+curl http://localhost:8080/api/v1/posts/117/likes/count
 # Retorna: 5
 ```
 
@@ -595,7 +595,7 @@ Motivo: Spam
 
 #### Passo 2: Admin Revisa o Conteúdo
 ```bash
-curl http://localhost:8080/api/posts/234
+curl http://localhost:8080/api/v1/posts/234
 ```
 
 **Resposta:**
@@ -612,7 +612,7 @@ curl http://localhost:8080/api/posts/234
 
 #### Passo 3: Admin Deleta o Post
 ```bash
-curl -X DELETE http://localhost:8080/api/posts/234 \
+curl -X DELETE http://localhost:8080/api/v1/posts/234 \
   -H "Authorization: Bearer TOKEN_DO_ADMIN"
 ```
 
@@ -623,13 +623,13 @@ curl -X DELETE http://localhost:8080/api/posts/234 \
 
 #### Passo 4: Verificar Outros Posts do Mesmo Autor
 ```bash
-curl http://localhost:8080/api/users/42
+curl http://localhost:8080/api/v1/users/42
 ```
 
 #### Passo 5: Se Necessário, Admin Deleta Tag Spam
 ```bash
 # Se existir uma tag criada por engano
-curl -X DELETE http://localhost:8080/api/admin/tags/99 \
+curl -X DELETE http://localhost:8080/api/v1/admin/tags/99 \
   -H "Authorization: Bearer TOKEN_DO_ADMIN"
 ```
 

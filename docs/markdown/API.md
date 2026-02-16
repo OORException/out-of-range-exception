@@ -37,7 +37,7 @@ Esta é a documentação oficial da API REST do Sistema de Fórum Web desenvolvi
 ### URL Base
 
 ```
-http://localhost:8080/api
+http://localhost:8080/api/v1
 ```
 
 ### Formato de Dados
@@ -68,7 +68,7 @@ Authorization: Bearer {token}  # Para endpoints autenticados
 
 Cria uma nova conta de usuário no sistema.
 
-**Endpoint**: `POST /auth/register`
+**Endpoint**: `POST /v1/auth/register`
 
 **Request Body**:
 ```json
@@ -109,7 +109,7 @@ Cria uma nova conta de usuário no sistema.
 
 Autentica um usuário existente.
 
-**Endpoint**: `POST /auth/login`
+**Endpoint**: `POST /v1/auth/login`
 
 **Request Body**:
 ```json
@@ -148,7 +148,7 @@ Autentica um usuário existente.
 
 Retorna a lista de todos os usuários cadastrados.
 
-**Endpoint**: `GET /users`
+**Endpoint**: `GET /v1/users`
 
 **Response** (200 OK):
 ```json
@@ -176,7 +176,7 @@ Retorna a lista de todos os usuários cadastrados.
 
 Retorna os dados de um usuário específico.
 
-**Endpoint**: `GET /users/{userId}`
+**Endpoint**: `GET /v1/users/{userId}`
 
 **Parâmetros de URL**:
 - `userId` (Long): ID do usuário
@@ -204,7 +204,7 @@ Retorna os dados de um usuário específico.
 
 Retorna todas as categorias disponíveis no fórum.
 
-**Endpoint**: `GET /categories`
+**Endpoint**: `GET /v1/categories`
 
 **Response** (200 OK):
 ```json
@@ -230,7 +230,7 @@ Retorna todas as categorias disponíveis no fórum.
 
 Retorna os detalhes de uma categoria específica.
 
-**Endpoint**: `GET /categories/{categoryId}`
+**Endpoint**: `GET /v1/categories/{categoryId}`
 
 **Parâmetros de URL**:
 - `categoryId` (Long): ID da categoria
@@ -257,7 +257,7 @@ Retorna os detalhes de uma categoria específica.
 
 Retorna todas as tags disponíveis.
 
-**Endpoint**: `GET /tags`
+**Endpoint**: `GET /v1/tags`
 
 **Response** (200 OK):
 ```json
@@ -286,7 +286,7 @@ Retorna todas as tags disponíveis.
 
 Retorna os detalhes de uma tag específica.
 
-**Endpoint**: `GET /tags/{tagId}`
+**Endpoint**: `GET /v1/tags/{tagId}`
 
 **Parâmetros de URL**:
 - `tagId` (Long): ID da tag
@@ -312,7 +312,7 @@ Retorna os detalhes de uma tag específica.
 
 Cria um novo tópico de discussão.
 
-**Endpoint**: `POST /topics`
+**Endpoint**: `POST /v1/topics`
 
 **Requer Autenticação**: Sim
 
@@ -374,7 +374,7 @@ Cria um novo tópico de discussão.
 
 Retorna todos os tópicos do fórum.
 
-**Endpoint**: `GET /topics`
+**Endpoint**: `GET /v1/topics`
 
 **Response** (200 OK):
 ```json
@@ -409,7 +409,7 @@ Retorna todos os tópicos do fórum.
 
 Retorna os detalhes completos de um tópico.
 
-**Endpoint**: `GET /topics/{topicId}`
+**Endpoint**: `GET /v1/topics/{topicId}`
 
 **Parâmetros de URL**:
 - `topicId` (Long): ID do tópico
@@ -456,7 +456,7 @@ Retorna os detalhes completos de um tópico.
 
 Adiciona uma resposta a um tópico existente.
 
-**Endpoint**: `POST /posts`
+**Endpoint**: `POST /v1/posts`
 
 **Requer Autenticação**: Sim
 
@@ -496,7 +496,7 @@ Adiciona uma resposta a um tópico existente.
 
 Retorna um post específico.
 
-**Endpoint**: `GET /posts/{postId}`
+**Endpoint**: `GET /v1/posts/{postId}`
 
 **Parâmetros de URL**:
 - `postId` (Long): ID do post
@@ -523,7 +523,7 @@ Retorna um post específico.
 
 Retorna todos os posts de um tópico específico, ordenados cronologicamente.
 
-**Endpoint**: `GET /posts/topic/{topicId}`
+**Endpoint**: `GET /v1/posts/topic/{topicId}`
 
 **Parâmetros de URL**:
 - `topicId` (Long): ID do tópico
@@ -556,7 +556,7 @@ Retorna todos os posts de um tópico específico, ordenados cronologicamente.
 
 Atualiza o conteúdo de um post existente.
 
-**Endpoint**: `PATCH /posts/{postId}`
+**Endpoint**: `PATCH /v1/posts/{postId}`
 
 **Requer Autenticação**: Sim (apenas o autor do post)
 
@@ -598,7 +598,7 @@ Atualiza o conteúdo de um post existente.
 
 Remove um post do sistema.
 
-**Endpoint**: `DELETE /posts/{postId}`
+**Endpoint**: `DELETE /v1/posts/{postId}`
 
 **Requer Autenticação**: Sim (apenas o autor ou admin)
 
@@ -624,7 +624,7 @@ Remove um post do sistema.
 
 Adiciona um like a um post.
 
-**Endpoint**: `POST /posts/{postId}/likes`
+**Endpoint**: `POST /v1/posts/{postId}/likes`
 
 **Requer Autenticação**: Sim
 
@@ -648,7 +648,7 @@ Adiciona um like a um post.
 
 Remove o like de um post.
 
-**Endpoint**: `DELETE /posts/{postId}/likes`
+**Endpoint**: `DELETE /v1/posts/{postId}/likes`
 
 **Requer Autenticação**: Sim
 
@@ -672,7 +672,7 @@ Remove o like de um post.
 
 Retorna o número total de likes de um post.
 
-**Endpoint**: `GET /posts/{postId}/likes/count`
+**Endpoint**: `GET /v1/posts/{postId}/likes/count`
 
 **Parâmetros de URL**:
 - `postId` (Long): ID do post
@@ -694,7 +694,7 @@ Retorna o número total de likes de um post.
 
 Cria uma sala de chat associada a um tópico.
 
-**Endpoint**: `POST /chats/topic/{topicId}`
+**Endpoint**: `POST /v1/chats/topic/{topicId}`
 
 **Requer Autenticação**: Sim
 
@@ -718,7 +718,7 @@ Cria uma sala de chat associada a um tópico.
 
 Retorna informações de um chat específico.
 
-**Endpoint**: `GET /chats/{chatId}`
+**Endpoint**: `GET /v1/chats/{chatId}`
 
 **Parâmetros de URL**:
 - `chatId` (Long): ID do chat
@@ -745,7 +745,7 @@ Retorna informações de um chat específico.
 
 Retorna todas as mensagens de um chat.
 
-**Endpoint**: `GET /chats/{chatId}/messages`
+**Endpoint**: `GET /v1/chats/{chatId}/messages`
 
 **Parâmetros de URL**:
 - `chatId` (Long): ID do chat
@@ -780,7 +780,7 @@ Retorna todas as mensagens de um chat.
 
 Envia uma nova mensagem em um chat.
 
-**Endpoint**: `POST /chats/{chatId}/messages`
+**Endpoint**: `POST /v1/chats/{chatId}/messages`
 
 **Requer Autenticação**: Sim
 
@@ -826,7 +826,7 @@ Envia uma nova mensagem em um chat.
 
 Adiciona o usuário atual como participante do chat.
 
-**Endpoint**: `POST /chats/{chatId}/participants/join`
+**Endpoint**: `POST /v1/chats/{chatId}/participants/join`
 
 **Requer Autenticação**: Sim
 
@@ -850,7 +850,7 @@ Adiciona o usuário atual como participante do chat.
 
 Remove o usuário atual dos participantes do chat.
 
-**Endpoint**: `POST /chats/{chatId}/participants/leave`
+**Endpoint**: `POST /v1/chats/{chatId}/participants/leave`
 
 **Requer Autenticação**: Sim
 
@@ -874,7 +874,7 @@ Remove o usuário atual dos participantes do chat.
 
 Retorna o número de participantes ativos em um chat.
 
-**Endpoint**: `GET /chats/{chatId}/participants/count`
+**Endpoint**: `GET /v1/chats/{chatId}/participants/count`
 
 **Parâmetros de URL**:
 - `chatId` (Long): ID do chat
@@ -896,7 +896,7 @@ Retorna o número de participantes ativos em um chat.
 
 Cria uma nova categoria no sistema.
 
-**Endpoint**: `POST /admin/categories`
+**Endpoint**: `POST /v1/admin/categories`
 
 **Requer Autenticação**: Sim (role: ADMIN)
 
@@ -933,7 +933,7 @@ Cria uma nova categoria no sistema.
 
 Atualiza uma categoria existente.
 
-**Endpoint**: `PUT /admin/categories/{categoryId}`
+**Endpoint**: `PUT /v1/admin/categories/{categoryId}`
 
 **Requer Autenticação**: Sim (role: ADMIN)
 
@@ -970,7 +970,7 @@ Atualiza uma categoria existente.
 
 Remove uma categoria do sistema.
 
-**Endpoint**: `DELETE /admin/categories/{categoryId}`
+**Endpoint**: `DELETE /v1/admin/categories/{categoryId}`
 
 **Requer Autenticação**: Sim (role: ADMIN)
 
@@ -995,7 +995,7 @@ Remove uma categoria do sistema.
 
 Cria uma nova tag no sistema.
 
-**Endpoint**: `POST /admin/tags`
+**Endpoint**: `POST /v1/admin/tags`
 
 **Requer Autenticação**: Sim (role: ADMIN)
 
@@ -1029,7 +1029,7 @@ Cria uma nova tag no sistema.
 
 Atualiza uma tag existente.
 
-**Endpoint**: `PUT /admin/tags/{tagId}`
+**Endpoint**: `PUT /v1/admin/tags/{tagId}`
 
 **Requer Autenticação**: Sim (role: ADMIN)
 
@@ -1064,7 +1064,7 @@ Atualiza uma tag existente.
 
 Remove uma tag do sistema.
 
-**Endpoint**: `DELETE /admin/tags/{tagId}`
+**Endpoint**: `DELETE /v1/admin/tags/{tagId}`
 
 **Requer Autenticação**: Sim (role: ADMIN)
 
@@ -1124,7 +1124,7 @@ Todos os erros retornam um JSON padronizado:
   "status": 400,
   "error": "Bad Request",
   "message": "Validation failed",
-  "path": "/api/topics",
+  "path": "/api/v1/topics",
   "errors": [
     {
       "field": "title",
@@ -1147,7 +1147,7 @@ Todos os erros retornam um JSON padronizado:
   "status": 400,
   "error": "Bad Request",
   "message": "O conteúdo deve ter no mínimo 10 caracteres",
-  "path": "/api/posts"
+  "path": "/api/v1/posts"
 }
 ```
 
@@ -1158,7 +1158,7 @@ Todos os erros retornam um JSON padronizado:
   "status": 404,
   "error": "Not Found",
   "message": "Post not found with id: 999",
-  "path": "/api/posts/999"
+  "path": "/api/v1/posts/999"
 }
 ```
 
@@ -1169,7 +1169,7 @@ Todos os erros retornam um JSON padronizado:
   "status": 403,
   "error": "Forbidden",
   "message": "You don't have permission to edit this post",
-  "path": "/api/posts/42"
+  "path": "/api/v1/posts/42"
 }
 ```
 
@@ -1213,7 +1213,7 @@ Todos os erros retornam um JSON padronizado:
 
 ```bash
 # Registrar novo usuário
-curl -X POST http://localhost:8080/api/auth/register \
+curl -X POST http://localhost:8080/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "username": "jefferson",
@@ -1223,7 +1223,7 @@ curl -X POST http://localhost:8080/api/auth/register \
   }'
 
 # Fazer login
-curl -X POST http://localhost:8080/api/auth/login \
+curl -X POST http://localhost:8080/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "username": "jefferson",
@@ -1234,7 +1234,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 ### Criar Tópico
 
 ```bash
-curl -X POST http://localhost:8080/api/topics \
+curl -X POST http://localhost:8080/api/v1/topics \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN_AQUI" \
   -d '{
@@ -1248,13 +1248,13 @@ curl -X POST http://localhost:8080/api/topics \
 ### Listar Tópicos
 
 ```bash
-curl -X GET http://localhost:8080/api/topics
+curl -X GET http://localhost:8080/api/v1/topics
 ```
 
 ### Criar Post
 
 ```bash
-curl -X POST http://localhost:8080/api/posts \
+curl -X POST http://localhost:8080/api/v1/posts \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN_AQUI" \
   -d '{
@@ -1266,7 +1266,7 @@ curl -X POST http://localhost:8080/api/posts \
 ### Curtir Post
 
 ```bash
-curl -X POST http://localhost:8080/api/posts/42/likes \
+curl -X POST http://localhost:8080/api/v1/posts/42/likes \
   -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
