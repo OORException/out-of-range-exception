@@ -35,7 +35,7 @@ A aplicação estará disponível em: **http://localhost:8080**
 ### Passo 1: Registrar um Usuário
 
 ```bash
-curl -X POST http://localhost:8080/api/auth/register \
+curl -X POST http://localhost:8080/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "username": "admin",
@@ -64,7 +64,7 @@ curl -X POST http://localhost:8080/api/auth/register \
 ### Passo 2: Criar uma Categoria (como Admin)
 
 ```bash
-curl -X POST http://localhost:8080/api/admin/categories \
+curl -X POST http://localhost:8080/api/v1/admin/categories \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN_AQUI" \
   -d '{
@@ -88,7 +88,7 @@ curl -X POST http://localhost:8080/api/admin/categories \
 
 ```bash
 # Tag 1: Java
-curl -X POST http://localhost:8080/api/admin/tags \
+curl -X POST http://localhost:8080/api/v1/admin/tags \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN_AQUI" \
   -d '{
@@ -96,7 +96,7 @@ curl -X POST http://localhost:8080/api/admin/tags \
   }'
 
 # Tag 2: Spring Boot
-curl -X POST http://localhost:8080/api/admin/tags \
+curl -X POST http://localhost:8080/api/v1/admin/tags \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN_AQUI" \
   -d '{
@@ -109,7 +109,7 @@ curl -X POST http://localhost:8080/api/admin/tags \
 ### Passo 4: Criar um Tópico
 
 ```bash
-curl -X POST http://localhost:8080/api/topics \
+curl -X POST http://localhost:8080/api/v1/topics \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN_AQUI" \
   -d '{
@@ -155,7 +155,7 @@ curl -X POST http://localhost:8080/api/topics \
 ### Passo 5: Adicionar uma Resposta (Post)
 
 ```bash
-curl -X POST http://localhost:8080/api/posts \
+curl -X POST http://localhost:8080/api/v1/posts \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN_AQUI" \
   -d '{
@@ -169,7 +169,7 @@ curl -X POST http://localhost:8080/api/posts \
 ### Passo 6: Curtir o Post
 
 ```bash
-curl -X POST http://localhost:8080/api/posts/2/likes \
+curl -X POST http://localhost:8080/api/v1/posts/2/likes \
   -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
@@ -179,27 +179,27 @@ curl -X POST http://localhost:8080/api/posts/2/likes \
 
 ### Listar Todas as Categorias
 ```bash
-curl http://localhost:8080/api/categories
+curl http://localhost:8080/api/v1/categories
 ```
 
 ### Listar Todos os Tópicos
 ```bash
-curl http://localhost:8080/api/topics
+curl http://localhost:8080/api/v1/topics
 ```
 
 ### Ver um Tópico Específico
 ```bash
-curl http://localhost:8080/api/topics/1
+curl http://localhost:8080/api/v1/topics/1
 ```
 
 ### Listar Posts de um Tópico
 ```bash
-curl http://localhost:8080/api/posts/topic/1
+curl http://localhost:8080/api/v1/posts/topic/1
 ```
 
 ### Contar Likes de um Post
 ```bash
-curl http://localhost:8080/api/posts/2/likes/count
+curl http://localhost:8080/api/v1/posts/2/likes/count
 ```
 
 ---
@@ -212,37 +212,37 @@ sequenceDiagram
     participant A as API
     participant DB as Banco de Dados
 
-    U->>A: POST /api/auth/register
+    U->>A: POST /api/v1/auth/register
     A->>DB: Criar usuário
     DB-->>A: Usuário criado
     A-->>U: Token JWT
 
-    U->>A: POST /api/admin/categories (com token)
+    U->>A: POST /api/v1/admin/categories (com token)
     A->>DB: Criar categoria
     DB-->>A: Categoria criada
     A-->>U: Dados da categoria
 
-    U->>A: POST /api/admin/tags (com token)
+    U->>A: POST /api/v1/admin/tags (com token)
     A->>DB: Criar tag
     DB-->>A: Tag criada
     A-->>U: Dados da tag
 
-    U->>A: POST /api/topics (com token)
+    U->>A: POST /api/v1/topics (com token)
     A->>DB: Criar tópico
     DB-->>A: Tópico criado
     A-->>U: Dados do tópico
 
-    U->>A: GET /api/topics
+    U->>A: GET /api/v1/topics
     A->>DB: Buscar tópicos
     DB-->>A: Lista de tópicos
     A-->>U: JSON com tópicos
 
-    U->>A: POST /api/posts (com token)
+    U->>A: POST /api/v1/posts (com token)
     A->>DB: Criar post
     DB-->>A: Post criado
     A-->>U: Dados do post
 
-    U->>A: POST /api/posts/{postId}/likes (com token)
+    U->>A: POST /api/v1/posts/{postId}/likes (com token)
     A->>DB: Adicionar like
     DB-->>A: Like adicionado
     A-->>U: 201 Created
@@ -307,7 +307,7 @@ Para facilitar os testes, você pode importar esta collection no Postman:
 
 ```json
 {
-  "base_url": "http://localhost:8080/api",
+  "base_url": "http://localhost:8080/api/v1",
   "token": "",
   "userId": "",
   "categoryId": "",
@@ -324,7 +324,7 @@ Para facilitar os testes, você pode importar esta collection no Postman:
 
 ### Verificar Status da API
 ```bash
-curl http://localhost:8080/api/categories
+curl http://localhost:8080/api/v1/categories
 ```
 Se retornar um array JSON (mesmo que vazio `[]`), a API está funcionando!
 
@@ -389,8 +389,8 @@ Após criar os dados iniciais, você terá:
 ### Problema: "404 Not Found"
 **Solução**: Verifique se o ID do recurso existe. Liste todos os recursos primeiro:
 ```bash
-curl http://localhost:8080/api/categories
-curl http://localhost:8080/api/topics
+curl http://localhost:8080/api/v1/categories
+curl http://localhost:8080/api/v1/topics
 ```
 
 ### Problema: "400 Bad Request - Validation failed"

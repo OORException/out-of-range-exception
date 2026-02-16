@@ -16,6 +16,7 @@ import java.util.List;
 @Table(
     name = "users",
     indexes = {
+        @Index(name = "idx_users_username", columnList = "username", unique = true),
         @Index(name = "idx_users_email", columnList = "email", unique = true),
         @Index(name = "idx_users_level", columnList = "level")
     }
@@ -30,9 +31,13 @@ public class User {
     @Getter
     private Long id;
 
-    @Column(nullable = false, length = 120)
+    @Column(nullable = false, length = 50, unique = true)
     @Getter
-    private String name;
+    private String username;
+
+    @Column(name = "full_name", nullable = false, length = 120)
+    @Getter
+    private String fullName;
 
     @Column(nullable = false, length = 180, unique = true)
     @Getter
@@ -77,8 +82,12 @@ public class User {
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
 
-    public void changeName(String name) {
-        this.name = name;
+    public void changeUsername(String username) {
+        this.username = username;
+    }
+
+    public void changeFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public void changeEmail(String email) {
