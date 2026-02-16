@@ -112,9 +112,9 @@ public class ApiExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
         log.error("Data Integrity Violation: {}", ex.getMessage());
-        String message = "Operação violou restrição de integridade do banco de dados";
+        String message = "Operation violated database integrity constraint";
         if (ex.getMessage().contains("constraint")) {
-            message = "Esse registro já existe ou possui dependências que impedem a operação";
+            message = "This record already exists or has dependencies that prevent the operation";
         }
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
@@ -133,7 +133,7 @@ public class ApiExceptionHandler {
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "Erro interno do servidor. Por favor, contate o administrador.",
+                "Internal server error. Please contact the administrator.",
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
