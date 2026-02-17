@@ -1,5 +1,6 @@
 package br.edu.iff.ccc.webdev.service.chat.impl;
 
+import br.edu.iff.ccc.webdev.dto.websocket.ChatEventDto;
 import br.edu.iff.ccc.webdev.exception.BadRequestException;
 import br.edu.iff.ccc.webdev.exception.ConflictException;
 import br.edu.iff.ccc.webdev.exception.NotFoundException;
@@ -12,10 +13,12 @@ import br.edu.iff.ccc.webdev.repository.UserRepository;
 import br.edu.iff.ccc.webdev.security.SecurityUtils;
 import br.edu.iff.ccc.webdev.service.chat.ChatParticipationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -26,6 +29,7 @@ public class ChatParticipationServiceImpl implements ChatParticipationService {
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
     private final SecurityUtils securityUtils;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     @Transactional
@@ -56,6 +60,8 @@ public class ChatParticipationServiceImpl implements ChatParticipationService {
                     .build();
             chatParticipationRepository.save(participation);
         }
+
+        broadcastJoinEvent(chatId, user);
     }
 
     @Override
@@ -73,6 +79,10 @@ public class ChatParticipationServiceImpl implements ChatParticipationService {
 
         participation.markLeftNow();
         chatParticipationRepository.save(participation);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        broadcastLeaveEvent(chatId, user);
     }
 
     @Override
@@ -83,5 +93,41 @@ public class ChatParticipationServiceImpl implements ChatParticipationService {
         }
 
         return chatParticipationRepository.countByChatIdAndActiveTrue(chatId);
+    }
+
+    /**
+     * Faz broadcast de evento JOIN via WebSocket
+     */
+    private void broadcastJoinEvent(Long chatId, User user) {
+        ChatEventDto event = ChatEventDto.builder()
+                .type(ChatEventDto.EventType.JOIN)
+                .chatId(chatId)
+                .userId(user.getId())
+                .username(user.getUsername())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        messagingTemplate.convertAndSend(
+                "/topic/chat/" + chatId + "/events",
+                event
+        );
+    }
+
+    /**
+     * Faz broadcast de evento LEAVE via WebSocket
+     */
+    private void broadcastLeaveEvent(Long chatId, User user) {
+        ChatEventDto event = ChatEventDto.builder()
+                .type(ChatEventDto.EventType.LEAVE)
+                .chatId(chatId)
+                .userId(user.getId())
+                .username(user.getUsername())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        messagingTemplate.convertAndSend(
+                "/topic/chat/" + chatId + "/events",
+                event
+        );
     }
 }
