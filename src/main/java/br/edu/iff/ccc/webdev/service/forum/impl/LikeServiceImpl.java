@@ -8,6 +8,7 @@ import br.edu.iff.ccc.webdev.model.support.Like;
 import br.edu.iff.ccc.webdev.repository.LikeRepository;
 import br.edu.iff.ccc.webdev.repository.PostRepository;
 import br.edu.iff.ccc.webdev.repository.UserRepository;
+import br.edu.iff.ccc.webdev.security.SecurityUtils;
 import br.edu.iff.ccc.webdev.service.forum.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,12 @@ public class LikeServiceImpl implements LikeService {
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final SecurityUtils securityUtils;
 
     @Override
     @Transactional
     public void likePost(Long postId) {
-        // TODO: Get actual user from security context - for now use hardcoded ID
-        Long userId = 1L;
+        Long userId = securityUtils.getCurrentUserId();
 
         if (likeRepository.existsByUserIdAndPostId(userId, postId)) {
             throw new ConflictException("You have already liked this post");
@@ -51,8 +52,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     @Transactional
     public void unlikePost(Long postId) {
-        // TODO: Get actual user from security context - for now use hardcoded ID
-        Long userId = 1L;
+        Long userId = securityUtils.getCurrentUserId();
 
         if (!likeRepository.existsByUserIdAndPostId(userId, postId)) {
             throw new NotFoundException("You have not liked this post yet");

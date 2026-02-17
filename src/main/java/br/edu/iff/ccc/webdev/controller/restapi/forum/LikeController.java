@@ -1,6 +1,7 @@
 package br.edu.iff.ccc.webdev.controller.restapi.forum;
 
 import br.edu.iff.ccc.webdev.repository.LikeRepository;
+import br.edu.iff.ccc.webdev.security.SecurityUtils;
 import br.edu.iff.ccc.webdev.service.forum.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ public class LikeController {
 
     private final LikeService likeService;
     private final LikeRepository likeRepository;
+    private final SecurityUtils securityUtils;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -31,7 +33,9 @@ public class LikeController {
         return likeRepository.countByPostId(postId);
     }
 
-    // TODO: Add check if user liked post when authentication is implemented
-    // @GetMapping("/check")
-    // public boolean isLikedByCurrentUser(@PathVariable Long postId) { ... }
+    @GetMapping("/check")
+    public boolean isLikedByCurrentUser(@PathVariable Long postId) {
+        Long userId = securityUtils.getCurrentUserId();
+        return likeRepository.existsByUserIdAndPostId(userId, postId);
+    }
 }

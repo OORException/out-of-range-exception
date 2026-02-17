@@ -9,6 +9,7 @@ import br.edu.iff.ccc.webdev.model.entity.User;
 import br.edu.iff.ccc.webdev.repository.PostRepository;
 import br.edu.iff.ccc.webdev.repository.TopicRepository;
 import br.edu.iff.ccc.webdev.repository.UserRepository;
+import br.edu.iff.ccc.webdev.security.SecurityUtils;
 import br.edu.iff.ccc.webdev.service.forum.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final TopicRepository topicRepository;
     private final UserRepository userRepository;
+    private final SecurityUtils securityUtils;
 
     @Override
     @Transactional
@@ -30,8 +32,8 @@ public class PostServiceImpl implements PostService {
         Topic topic = topicRepository.findById(request.topicId())
                 .orElseThrow(() -> new NotFoundException("Topic not found with id: " + request.topicId()));
 
-        // TODO: Get actual user from security context - for now use hardcoded ID
-        User author = userRepository.findById(1L)
+        Long userId = securityUtils.getCurrentUserId();
+        User author = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         Post post = Post.builder()

@@ -12,6 +12,7 @@ import br.edu.iff.ccc.webdev.repository.TagRepository;
 import br.edu.iff.ccc.webdev.repository.TopicRepository;
 import br.edu.iff.ccc.webdev.repository.TopicViewRepository;
 import br.edu.iff.ccc.webdev.repository.UserRepository;
+import br.edu.iff.ccc.webdev.security.SecurityUtils;
 import br.edu.iff.ccc.webdev.service.forum.TopicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class TopicServiceImpl implements TopicService {
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
     private final TopicViewRepository topicViewRepository;
+    private final SecurityUtils securityUtils;
 
     @Override
     @Transactional
@@ -39,8 +41,8 @@ public class TopicServiceImpl implements TopicService {
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new NotFoundException("Category not found with id: " + request.categoryId()));
 
-        // TODO: Get actual user from security context - for now use hardcoded ID
-        User creator = userRepository.findById(1L)
+        Long userId = securityUtils.getCurrentUserId();
+        User creator = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         Set<Tag> tags = new HashSet<>();
