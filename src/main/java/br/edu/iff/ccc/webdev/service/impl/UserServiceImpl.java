@@ -1,6 +1,8 @@
 package br.edu.iff.ccc.webdev.service.impl;
 
+import br.edu.iff.ccc.webdev.dto.request.UpdateUserProfileRequest;
 import br.edu.iff.ccc.webdev.dto.response.UserResponse;
+import br.edu.iff.ccc.webdev.exception.ConflictException;
 import br.edu.iff.ccc.webdev.exception.NotFoundException;
 import br.edu.iff.ccc.webdev.model.entity.User;
 import br.edu.iff.ccc.webdev.repository.UserRepository;
@@ -33,6 +35,34 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public UserResponse updateProfile(Long userId, UpdateUserProfileRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
+
+        if (request.username() != null && !request.username().equals(user.getUsername())) {
+            if (userRepository.existsByUsername(request.username())) {
+                throw new ConflictException("Username is already taken: " + request.username());
+            }
+            user.changeUsername(request.username());
+        }
+
+        if (request.email() != null && !request.email().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(request.email())) {
+                throw new ConflictException("Email is already registered: " + request.email());
+            }
+            user.changeEmail(request.email());
+        }
+
+        if (request.fullName() != null && !request.fullName().equals(user.getFullName())) {
+            user.changeFullName(request.fullName());
+        }
+
+        user = userRepository.save(user);
+        return toResponse(user);
     }
 
     private UserResponse toResponse(User user) {
