@@ -1,219 +1,87 @@
 # Out-of-Range-Exception
 
-> Sistema de Fórum Web desenvolvido para a disciplina de Programação Web - 5º Período - IFF
+> Sistema de Fórum Web com autenticação JWT - Programação Web - 5º Período IFF
 
-## Sobre o Projeto
-
-**Out-of-Range-Exception** é um sistema completo de fórum de discussão desenvolvido com Spring Boot, oferecendo funcionalidades modernas para comunidades online, incluindo sistema de tópicos, posts, likes, chats em grupo e muito mais.
-
-## Funcionalidades Principais
-
-- Autenticação e Autorização - Sistema completo de registro e login
-- Sistema de Fórum - Categorias, tópicos, posts e respostas
-- Sistema de Tags - Classificação e organização de conteúdo
-- Sistema de Likes - Curtidas em posts
-- Chat em Grupo - Salas de chat vinculadas a tópicos
-- Administração - Painel para gerenciar categorias e tags
-- API REST Completa - 32 endpoints documentados
+Sistema completo de fórum desenvolvido com Spring Boot, oferecendo autenticação JWT, controle de acesso baseado em roles (USER/ADMIN), categorias, tópicos, posts, likes e chats em grupo.
 
 ## Quick Start
 
-### Pré-requisitos
+### 1. Configurar Ambiente
 
-- Java 17 ou superior
-- Maven 3.6+
-- Porta 8080 disponível
+Copie `.env.example` para `.env`:
 
-### Executar a Aplicação
+```bash
+cp .env.example .env
+```
+
+O arquivo contém configurações do banco de dados e JWT (não commitar).
+
+### 2. Executar
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-A aplicação estará disponível em: **http://localhost:8080**
+Aplicação disponível em: **http://localhost:8080**
 
-### Primeiros Passos
+### 3. Primeiro Acesso
 
-1. Registre um usuário via `POST /api/v1/auth/register`
-2. Crie categorias e tags (como admin)
-3. Crie seu primeiro tópico
-4. Comece a interagir!
-
-**Para instruções detalhadas**, consulte o [Guia de Início Rápido](docs/markdown/GUIA_RAPIDO.md).
-
-## Documentação Completa
-
-A documentação completa do projeto está organizada na pasta **docs/markdown/**:
-
-- [**API.md**](docs/markdown/API.md) - Documentação completa de todos os 32 endpoints REST
-- [**GUIA_RAPIDO.md**](docs/markdown/GUIA_RAPIDO.md) - Configure e rode em menos de 5 minutos
-- [**CASOS_DE_USO.md**](docs/markdown/CASOS_DE_USO.md) - 8 exemplos práticos de uso
-- [**ESTRUTURA_DE_DADOS.md**](docs/markdown/ESTRUTURA_DE_DADOS.md) - Detalhamento de todas as entidades
-- [**REQUISITOS.md**](docs/markdown/REQUISITOS.md) - Especificação de requisitos
-
-Também disponível:
-
-- [**Diagrama de Classes**](docs/diagrams/DIAGRAMA_DE_CLASSES.png) - Arquitetura visual
-- [**Wireframes**](docs/wireframes/) - Layouts das telas
-
-## Tecnologias Utilizadas
-
-### Backend
-- **Spring Boot 4.0.2** - Framework principal
-- **Spring Data JPA** - Persistência de dados
-- **Spring Security** - Autenticação e autorização
-- **Hibernate ORM** - Mapeamento objeto-relacional
-- **H2 Database** - Banco de dados em memória (desenvolvimento)
-- **Lombok** - Redução de código boilerplate
-- **Bean Validation** - Validação de dados
-
-### Estrutura do Projeto
-```
-src/main/java/br/edu/iff/ccc/webdev/
-├── config/          # Configurações (Security, CORS)
-├── controller/      # Controllers REST e Views
-│   ├── restapi/
-│   │   ├── admin/   # Endpoints administrativos
-│   │   ├── auth/    # Autenticação
-│   │   ├── chat/    # Chats e mensagens
-│   │   └── forum/   # Fórum (tópicos, posts, likes)
-│   └── view/        # Controllers de view (Thymeleaf)
-├── dto/             # Data Transfer Objects
-├── exception/       # Tratamento de exceções
-├── model/           # Entidades JPA
-├── repository/      # Repositories Spring Data
-├── security/        # Segurança e autenticação
-└── service/         # Lógica de negócio
+**Registrar usuário:**
+```bash
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","email":"admin@forum.com","password":"admin123","fullName":"Admin"}'
 ```
 
-## Principais Endpoints da API
-
-### Entidades Principais
-
-| Entidade | Descrição | Relações |
-|----------|-----------|----------|
-| **User** | Usuário do sistema | Autor de tópicos, posts e mensagens |
-| **Category** | Categoria de tópicos | Agrupa tópicos por assunto |
-| **Tag** | Etiqueta/marcador | Classifica tópicos (many-to-many) |
-| **Topic** | Tópico de discussão | Pertence a uma categoria, possui posts |
-| **Post** | Resposta em um tópico | Pertence a um tópico, possui likes |
-| **Like** | Curtida em um post | Relaciona usuário e post |
-| **Chat** | Sala de chat | Associada a um tópico |
-| **ChatMessage** | Mensagem de chat | Pertence a um chat |
-| **ChatParticipation** | Participação em chat | Relaciona usuário e chat |
-
-### Fluxo de Dados
-
+**Use o token retornado** em todas as requisições:
 ```
-1. Usuário se registra → Recebe token JWT
-2. Admin cria Categorias e Tags
-3. Usuário cria Tópico em uma Categoria com Tags
-4. Sistema cria Post inicial automaticamente
-5. Outros usuários criam Posts (respostas)
-6. Usuários dão Like nos Posts
-7. Sistema pode criar Chat para o Tópico
-8. Usuários entram no Chat e enviam mensagens
+Authorization: Bearer <token>
 ```
 
----
+## Funcionalidades
 
-## Guias de Uso
+- **Autenticação JWT** com BCrypt
+- **RBAC**: Níveis USER e ADMIN
+- **Fórum**: Categorias, tópicos, posts
+- **Interação**: Likes, chats em grupo
+- **API REST**: 33 endpoints
 
-### Para Desenvolvedores Frontend
+## Tecnologias
 
-1. Leia o [Guia de Início Rápido](docs/markdown/GUIA_RAPIDO.md)
-2. Configure a aplicação backend
-3. Consulte a [Documentação da API](docs/markdown/API.md)
-4. Use os wireframes como referência de design
-5. Implemente as chamadas aos endpoints documentados
+- Spring Boot 4.0.2
+- Spring Security + JWT (JJWT 0.12.5)
+- Spring Data JPA + H2
+- BCrypt, Lombok, Bean Validation
 
-### Para Desenvolvedores Backend
+## Documentação
 
-1. Estude o [Diagrama de Classes](docs/diagrams/DIAGRAMA_DE_CLASSES.png)
-2. Analise os [Requisitos](docs/markdown/REQUISITOS.md)
-3. Implemente novos recursos seguindo os padrões existentes
-4. Teste usando os exemplos da [Documentação da API](docs/markdown/API.md)
+**Consulte a pasta [docs/](docs/)** para documentação completa:
 
-### Para Testadores
+- **[API.md](docs/markdown/API.md)** - Todos os 33 endpoints REST
+- **[GUIA_RAPIDO.md](docs/markdown/GUIA_RAPIDO.md)** - Setup em 5 minutos
+- **[CASOS_DE_USO.md](docs/markdown/CASOS_DE_USO.md)** - Exemplos práticos
+- **[ESTRUTURA_DE_DADOS.md](docs/markdown/ESTRUTURA_DE_DADOS.md)** - Entidades e relacionamentos
+- **[REQUISITOS.md](docs/markdown/REQUISITOS.md)** - Especificação funcional
 
-1. Configure o ambiente com o [Guia Rápido](docs/markdown/GUIA_RAPIDO.md)
-2. Importe a collection do Postman (estrutura no guia)
-3. Execute os casos de teste baseados nos [Requisitos](docs/markdown/REQUISITOS.md)
-4. Valide os códigos de status na [Documentação da API](docs/markdown/API.md)
+## Endpoints Principais
 
----
+- **Auth (público)**: `/api/v1/auth/register`, `/api/v1/auth/login`
+- **Fórum**: `/api/v1/topics`, `/api/v1/posts`, `/api/v1/likes`
+- **Chat**: `/api/v1/chats/*`
+- **Admin (ADMIN only)**: `/api/v1/admin/categories`, `/api/v1/admin/tags`
 
-## Endpoints por Módulo
+**Total: 33 endpoints** - Veja [API.md](docs/markdown/API.md) para detalhes completos.
 
-### Autenticação
-- POST `/api/v1/auth/register` - Registrar usuário
-- POST `/api/v1/auth/login` - Fazer login
+## Troubleshooting
 
-### Usuários
-- GET `/api/v1/users` - Listar usuários
-- GET `/api/v1/users/{id}` - Buscar usuário
+**401 Unauthorized**: Token ausente/inválido → Faça login novamente  
+**403 Forbidden**: Sem permissão → Verifique role (USER vs ADMIN)  
+**Promover para ADMIN**: H2 Console → `UPDATE USER SET USER_LEVEL = 'ADMIN' WHERE ID = 1;`
 
-### Categorias
-- GET `/api/v1/categories` - Listar categorias
-- GET `/api/v1/categories/{id}` - Buscar categoria
-
-### Tags
-- GET `/api/v1/tags` - Listar tags
-- GET `/api/v1/tags/{id}` - Buscar tag
-
-### Tópicos
-- POST `/api/v1/topics` - Criar tópico
-- GET `/api/v1/topics` - Listar tópicos
-- GET `/api/v1/topics/{id}` - Buscar tópico
-
-### Posts
-- POST `/api/v1/posts` - Criar post
-- GET `/api/v1/posts/{id}` - Buscar post
-- GET `/api/v1/posts/topic/{topicId}` - Listar posts do tópico
-- PATCH `/api/v1/posts/{id}` - Editar post
-- DELETE `/api/v1/posts/{id}` - Deletar post
-
-### Likes
-- POST `/api/v1/posts/{postId}/likes` - Curtir post
-- DELETE `/api/v1/posts/{postId}/likes` - Descurtir post
-- GET `/api/v1/posts/{postId}/likes/count` - Contar likes
-
-### Chats
-- POST `/api/v1/chats/topic/{topicId}` - Criar chat
-- GET `/api/v1/chats/{id}` - Buscar chat
-- GET `/api/v1/chats/{id}/messages` - Listar mensagens
-- POST `/api/v1/chats/{id}/messages` - Enviar mensagem
-- POST `/api/v1/chats/{id}/participants/join` - Entrar no chat
-- POST `/api/v1/chats/{id}/participants/leave` - Sair do chat
-
-### Administração
-- POST `/api/v1/admin/categories` - Criar categoria
-- PUT `/api/v1/admin/categories/{id}` - Atualizar categoria
-- DELETE `/api/v1/admin/categories/{id}` - Deletar categoria
-- POST `/api/v1/admin/tags` - Criar tag
-- PUT `/api/v1/admin/tags/{id}` - Atualizar tag
-- DELETE `/api/v1/admin/tags/{id}` - Deletar tag
-
-**Total: 32 endpoints REST**
+Mais detalhes em [docs/markdown/GUIA_RAPIDO.md](docs/markdown/GUIA_RAPIDO.md)
 
 ---
 
 ## Licença
 
 [MIT](LICENSE)
-
-## Contribuindo
-
-1. Leia a [Documentação Completa](docs/)
-2. Faça fork do projeto
-3. Crie uma branch para sua feature (`git checkout -b feature/NovaFuncionalidade`)
-4. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
-5. Push para a branch (`git push origin feature/NovaFuncionalidade`)
-6. Abra um Pull Request
-
-## Suporte
-
-Para dúvidas ou problemas:
-- Consulte a [Documentação Completa](docs/README.md)
-- Veja os [Casos de Uso](docs/markdown/CASOS_DE_USO.md)
-- Leia o [Guia de Início Rápido](docs/markdown/GUIA_RAPIDO.md)

@@ -27,7 +27,8 @@ Esta é a documentação oficial da API REST do Sistema de Fórum Web desenvolvi
 - **Framework**: Spring Boot 4.0.2
 - **Linguagem**: Java 17
 - **Banco de Dados**: H2 (desenvolvimento) / PostgreSQL (produção)
-- **Autenticação**: Spring Security (JWT)
+- **Autenticação**: Spring Security + JWT (JJWT 0.12.5)
+- **Password Hashing**: BCrypt
 - **ORM**: Hibernate/JPA
 
 ---
@@ -59,6 +60,29 @@ Authorization: Bearer {token}  # Para endpoints autenticados
 - Datas no formato ISO 8601: `2026-02-14T10:30:00Z`
 - IDs são do tipo `Long` (número inteiro)
 - Campos obrigatórios são validados automaticamente
+
+### Autenticação e Segurança
+
+**Endpoints Públicos** (não requerem autenticação):
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `GET /h2-console/**` (apenas desenvolvimento)
+- `GET /actuator/health`
+
+**Endpoints Autenticados**: Todos os outros endpoints requerem o header `Authorization: Bearer <token>`
+
+**Controle de Acesso (RBAC)**:
+- **USER**: Pode criar tópicos, posts, curtir, participar de chats
+- **ADMIN**: Além das permissões USER, pode gerenciar categorias e tags (`/api/v1/admin/**`)
+
+**JWT Token**:
+- Algoritmo: HS256 (HMAC with SHA-256)
+- Expiração: 24 horas (configurável via `JWT_EXPIRATION`)
+- Retornado no login e registro
+
+**Password Hashing**:
+- BCrypt com salt automático
+- Senhas nunca são retornadas pela API
 
 ---
 
@@ -93,10 +117,15 @@ Cria uma nova conta de usuário no sistema.
   "username": "jefferson",
   "email": "jefferson@example.com",
   "fullName": "Jefferson Silva",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "expiresAt": "2026-02-15T10:30:00Z"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
+
+**Observações**:
+- A senha é automaticamente criptografada com BCrypt antes de ser armazenada
+- O token JWT retornado já inclui as roles do usuário
+- Use o token no header `Authorization: Bearer <token>` para requisições autenticadas
+- Token expira em 24 horas
 
 **Códigos de Status**:
 - `201`: Usuário criado com sucesso
@@ -688,6 +717,31 @@ Retorna o número total de likes de um post.
 
 ---
 
+### Verificar se Usuário Curtiu Post
+
+Verifica se o usuário autenticado curtiu um post específico.
+
+**Endpoint**: `GET /v1/posts/{postId}/likes/check`
+
+**Requer Autenticação**: Sim
+
+**Parâmetros de URL**:
+- `postId` (Long): ID do post
+
+**Response** (200 OK):
+```json
+true
+```
+
+Retorna `true` se o usuário curtiu o post, `false` caso contrário.
+
+**Códigos de Status**:
+- `200`: Verificação concluída
+- `401`: Não autenticado
+- `404`: Post não encontrado
+
+---
+
 ## Chats
 
 ### Criar Chat para Tópico
@@ -1177,12 +1231,34 @@ Todos os erros retornam um JSON padronizado:
 
 ## Notas Importantes
 
-### Autenticação
+### Autenticação e Segurança
 
-- A maioria dos endpoints requer autenticação via token JWT
-- O token deve ser incluído no header `Authorization: Bearer {token}`
-- Tokens expiram após 24 horas
-- Após expiração, faça login novamente para obter novo token
+- **Autenticação JWT**: Todos os endpoints (exceto `/auth/**`) requerem token
+- **Header**: `Authorization: Bearer {token}`
+- **Expiração**: 24 horas (configurável via `JWT_EXPIRATION`)
+- **Renovação**: Faça login novamente para obter novo token
+- **Password Hashing**: BCrypt com salt automático
+- **RBAC**: Dois níveis de acesso (USER e ADMIN)
+- **Proteção CSRF**: Desabilitada (API stateless)
+
+### Controle de Acesso
+
+- **Endpoints Públicos**: `/api/v1/auth/**`, `/h2-console/**`, `/actuator/health`
+- **USER**: Criar tópicos, posts, curtir, participar de chats
+- **ADMIN**: Além de USER, pode gerenciar categorias e tags (`/api/v1/admin/**`)
+
+### Total de Endpoints
+
+**33 endpoints REST** divididos em:
+- Autenticação: 2 (público)
+- Usuários: 2 (autenticado)
+- Categorias: 2 (autenticado)
+- Tags: 2 (autenticado)
+- Tópicos: 3 (autenticado)
+- Posts: 5 (autenticado)
+- Likes: 4 (autenticado) - inclui `/likes/check`
+- Chats: 7 (autenticado)
+- Administração: 6 (ADMIN)
 
 ### Paginação
 
