@@ -92,6 +92,17 @@ public class Topic {
         this.description = description;
     }
 
+    public void updateTags(Set<Tag> tags) {
+        this.tags.clear();
+        if (tags != null) {
+            this.tags.addAll(tags);
+        }
+    }
+
+    public void updateLastActivity() {
+        this.lastActivityAt = Instant.now();
+    }
+
     public List<Post> getPosts() {
         return Collections.unmodifiableList(posts);
     }
