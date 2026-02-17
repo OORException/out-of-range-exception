@@ -14,6 +14,34 @@ Este guia vai ajudá-lo a começar a usar a API em menos de 5 minutos.
 
 ---
 
+## 0. Configurar Variáveis de Ambiente
+
+**IMPORTANTE**: Antes de iniciar, copie o arquivo `.env.example` para `.env`:
+
+```bash
+cp .env.example .env
+```
+
+O arquivo `.env` contém:
+
+```properties
+# Database Configuration
+DB_URL=jdbc:h2:file:./.data/database
+DB_USER=user
+DB_PASSWORD=password
+
+# JWT Configuration
+JWT_SECRET=OutOfRangeExceptionSecretKeyForJWT2026MustBeAtLeast256BitsLongForHS256Algorithm
+JWT_EXPIRATION=86400000
+```
+
+**Observações**:
+- O arquivo `.env` **não deve ser commitado** (já incluído no `.gitignore`)
+- `JWT_SECRET` deve ter no mínimo 256 bits para HS256
+- `JWT_EXPIRATION` está em milissegundos (86400000 = 24 horas)
+
+---
+
 ## 1. Iniciar a Aplicação
 
 ### Opção A: Usando Maven Wrapper (recomendado)
@@ -52,12 +80,22 @@ curl -X POST http://localhost:8080/api/v1/auth/register \
   "username": "admin",
   "email": "admin@forum.com",
   "fullName": "Administrador",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "expiresAt": "2026-02-15T10:30:00Z"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
- **IMPORTANTE**: Copie o `token` da resposta. Você vai precisar dele!
+ **IMPORTANTE**: 
+- Copie o `token` da resposta. Você vai precisar dele para autenticar!
+- O token é gerado com JWT (algoritmo HS256) e expira em 24 horas
+- A senha é criptografada com BCrypt antes de ser armazenada
+
+### Autenticação nas Requisições
+
+Todas as requisições (exceto `/api/v1/auth/**`) requerem o header:
+
+```
+Authorization: Bearer SEU_TOKEN_AQUI
+```
 
 ---
 

@@ -9,6 +9,7 @@ import br.edu.iff.ccc.webdev.model.support.ChatParticipation;
 import br.edu.iff.ccc.webdev.repository.ChatParticipationRepository;
 import br.edu.iff.ccc.webdev.repository.ChatRepository;
 import br.edu.iff.ccc.webdev.repository.UserRepository;
+import br.edu.iff.ccc.webdev.security.SecurityUtils;
 import br.edu.iff.ccc.webdev.service.chat.ChatParticipationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class ChatParticipationServiceImpl implements ChatParticipationService {
     private final ChatParticipationRepository chatParticipationRepository;
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
+    private final SecurityUtils securityUtils;
 
     @Override
     @Transactional
@@ -31,8 +33,7 @@ public class ChatParticipationServiceImpl implements ChatParticipationService {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new NotFoundException("Chat not found with id: " + chatId));
 
-        // TODO: Get actual user from security context - for now use hardcoded ID
-        Long userId = 1L;
+        Long userId = securityUtils.getCurrentUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
@@ -60,8 +61,7 @@ public class ChatParticipationServiceImpl implements ChatParticipationService {
     @Override
     @Transactional
     public void leave(Long chatId) {
-        // TODO: Get actual user from security context - for now use hardcoded ID
-        Long userId = 1L;
+        Long userId = securityUtils.getCurrentUserId();
 
         ChatParticipation participation = chatParticipationRepository
                 .findByChatIdAndUserId(chatId, userId)

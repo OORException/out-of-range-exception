@@ -14,6 +14,7 @@ import br.edu.iff.ccc.webdev.repository.ChatMessageRepository;
 import br.edu.iff.ccc.webdev.repository.ChatRepository;
 import br.edu.iff.ccc.webdev.repository.TopicRepository;
 import br.edu.iff.ccc.webdev.repository.UserRepository;
+import br.edu.iff.ccc.webdev.security.SecurityUtils;
 import br.edu.iff.ccc.webdev.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class ChatServiceImpl implements ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final TopicRepository topicRepository;
     private final UserRepository userRepository;
+    private final SecurityUtils securityUtils;
 
     @Override
     @Transactional
@@ -75,8 +77,8 @@ public class ChatServiceImpl implements ChatService {
             throw new BadRequestException("Chat is not active");
         }
 
-        // TODO: Get actual user from security context - for now use hardcoded ID
-        User sender = userRepository.findById(1L)
+        Long userId = securityUtils.getCurrentUserId();
+        User sender = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         ChatMessage message = ChatMessage.builder()
