@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface ChatParticipationRepository extends JpaRepository<ChatParticipation, Long> {
     Optional<ChatParticipation> findByChatIdAndUserId(Long chatId, Long userId);
+    Optional<ChatParticipation> findByChatIdAndUserEmail(Long chatId, String userEmail);
     List<ChatParticipation> findByChatIdAndActiveTrue(Long chatId);
     long countByChatIdAndActiveTrue(Long chatId);
 }

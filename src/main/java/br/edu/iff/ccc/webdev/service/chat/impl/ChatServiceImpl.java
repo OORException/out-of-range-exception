@@ -2,6 +2,7 @@ package br.edu.iff.ccc.webdev.service.chat.impl;
 
 import br.edu.iff.ccc.webdev.dto.request.chat.SendChatMessageRequest;
 import br.edu.iff.ccc.webdev.dto.response.chat.ChatMessageResponse;
+import br.edu.iff.ccc.webdev.dto.websocket.ChatMessageWsDto;
 import br.edu.iff.ccc.webdev.exception.BadRequestException;
 import br.edu.iff.ccc.webdev.exception.ConflictException;
 import br.edu.iff.ccc.webdev.exception.NotFoundException;
@@ -17,10 +18,13 @@ import br.edu.iff.ccc.webdev.repository.UserRepository;
 import br.edu.iff.ccc.webdev.security.SecurityUtils;
 import br.edu.iff.ccc.webdev.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +37,7 @@ public class ChatServiceImpl implements ChatService {
     private final TopicRepository topicRepository;
     private final UserRepository userRepository;
     private final SecurityUtils securityUtils;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     @Transactional
@@ -91,6 +96,8 @@ public class ChatServiceImpl implements ChatService {
 
         message = chatMessageRepository.save(message);
 
+        broadcastMessage(message);
+
         return toResponse(message);
     }
 
@@ -103,6 +110,26 @@ public class ChatServiceImpl implements ChatService {
                 message.getStatus().name(),
                 message.getSentAt(),
                 message.getEditedAt()
+        );
+    }
+
+    /**
+     * Faz broadcast da mensagem para todos os participantes via WebSocket
+     */
+    private void broadcastMessage(ChatMessage message) {
+        ChatMessageWsDto wsDto = ChatMessageWsDto.builder()
+                .messageId(message.getId())
+                .chatId(message.getChat().getId())
+                .senderId(message.getSender().getId())
+                .senderUsername(message.getSender().getUsername())
+                .content(message.getContent())
+                .timestamp(LocalDateTime.ofInstant(message.getSentAt(), ZoneId.systemDefault()))
+                .status(message.getStatus())
+                .build();
+
+        messagingTemplate.convertAndSend(
+                "/topic/chat/" + message.getChat().getId(),
+                wsDto
         );
     }
 }

@@ -39,7 +39,6 @@ public class AuthServiceImpl implements AuthService {
             throw new ConflictException("Email is already registered: " + request.email());
         }
 
-        // Hash password with BCrypt
         String hashedPassword = passwordEncoder.encode(request.password());
 
         User user = User.builder()
@@ -54,7 +53,6 @@ public class AuthServiceImpl implements AuthService {
 
         user = userRepository.save(user);
 
-        // Generate JWT token
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
         String token = jwtUtil.generateToken(userDetails);
 
@@ -73,12 +71,10 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new BadRequestException("Invalid email or password"));
 
-        // Verify password with BCrypt
         if (!passwordEncoder.matches(request.password(), user.getPasswordHashForAuthentication())) {
             throw new BadRequestException("Invalid email or password");
         }
 
-        // Generate JWT token
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
         String token = jwtUtil.generateToken(userDetails);
 
