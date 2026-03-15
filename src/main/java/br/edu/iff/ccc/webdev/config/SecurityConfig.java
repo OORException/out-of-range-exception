@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers("/ws/**").permitAll() // WebSocket handshake
+                .requestMatchers("/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**").permitAll()
                 
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                 
