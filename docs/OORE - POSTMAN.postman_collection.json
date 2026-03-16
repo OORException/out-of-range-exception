@@ -1,0 +1,833 @@
+{
+  "info": {
+    "_postman_id": "7d51af25-97ec-49ee-a82b-d7284cd534bb",
+    "name": "OORE - POSTMAN",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53244215"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "Registrar",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"jefferson\",\r\n    \"email\": \"jefferson@example.com\",\r\n    \"password\": \"senha123\",\r\n    \"fullName\": \"Jefferson Silva\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"jefferson@example.com\",\r\n    \"username\": \"jefferson\",\r\n    \"password\": \"senha123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "categories",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar por Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categories/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "admin",
+      "item": [
+        {
+          "name": "Criar Categoria",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Inteligência Artificial\",\r\n  \"description\": \"Discussões sobre IA, Machine Learning e Deep Learning\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Categoria",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Inteligência Artificial\",\r\n    \"description\": \"Discussões sobre IA, Machine Learning, Deep Learning e Data Science\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/categories/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "categories",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Categoria",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/categories/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "categories",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Tag",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Kubernetes\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/tags",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tags"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Tag",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/tags/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tags",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "chats",
+      "item": [
+        {
+          "name": "Criar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chats/topic/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chats",
+                "topic",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar por Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chats/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chats",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Mensagens",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chats/1/messages",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chats",
+                "1",
+                "messages"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Enviar Mensagem",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"chatId\": 1,\r\n  \"content\": \"Obrigado pela ajuda!\",\r\n  \"messageType\": \"TEXT\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/chats/1/messages",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chats",
+                "1",
+                "messages"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Entrar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chats/1/participants/join",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chats",
+                "1",
+                "participants",
+                "join"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sair",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chats/1/participants/leave",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chats",
+                "1",
+                "participants",
+                "leave"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Contar Participantes Ativos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chats/1/participants/count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chats",
+                "1",
+                "participants",
+                "count"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "likes",
+      "item": [
+        {
+          "name": "Curtir",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1/likes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "1",
+                "likes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remover Curtida",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1/likes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "1",
+                "likes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Contar Curtidas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1/likes/count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "1",
+                "likes",
+                "count"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verificar se usuário curtiu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1/likes/check",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "1",
+                "likes",
+                "check"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "posts",
+      "item": [
+        {
+          "name": "Criar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"content\": \"Para usar Spring Security, você precisa adicionar a dependência no pom.xml e criar uma classe de configuração...\",\r\n  \"topicId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/posts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"content\": \"Para usar Spring Security, você precisa adicionar a dependência no pom.xml e criar uma classe SecurityConfig...\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/posts/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar por Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por Tópico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/topic/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "topic",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "tags",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tags",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tags"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar por Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tags/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tags",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "topics",
+      "item": [
+        {
+          "name": "Cadastrar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Como usar Spring Security?\",\r\n    \"content\": \"Gostaria de saber as melhores práticas para implementar autenticação com Spring Security.\",\r\n    \"categoryId\": 1,\r\n    \"tagIds\": [\r\n        1,\r\n        2\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/topics",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "topics"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/topics",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "topics"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar por Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/topics/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "topics",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar por Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Atualizar Tag",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"K8s\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/tags/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "tags",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
