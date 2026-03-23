@@ -76,7 +76,7 @@ Authorization: Bearer <token>
 
 **401 Unauthorized**: Token ausente/inválido → Faça login novamente  
 **403 Forbidden**: Sem permissão → Verifique role (USER vs ADMIN)  
-**Promover para ADMIN**: H2 Console → `UPDATE USER SET USER_LEVEL = 'ADMIN' WHERE ID = 1;`
+**Promover para ADMIN**: H2 Console → `UPDATE USERS SET LEVEL = 'ADMIN' WHERE ID = 1;`
 
 Mais detalhes em [docs/markdown/GUIA_RAPIDO.md](docs/markdown/GUIA_RAPIDO.md)
 
