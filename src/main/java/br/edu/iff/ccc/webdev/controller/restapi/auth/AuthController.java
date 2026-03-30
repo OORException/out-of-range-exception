@@ -26,4 +26,10 @@ public class AuthController {
     public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
+
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout() {
+        authService.logout();
+    }
 }

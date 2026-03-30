@@ -16,15 +16,66 @@
                 </nav>
             </div>
             <div class="flex items-center gap-3">
-                <a th:href="@{/auth/login}" class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <a id="topbar-login-link" th:href="@{/auth/login}" class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                     Entrar
                 </a>
-                <a th:href="@{/auth/register}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                <a id="topbar-register-link" th:href="@{/auth/register}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
                     Registrar
                 </a>
+                <div id="topbar-user-menu-wrapper" class="relative hidden">
+                    <button id="topbar-user-button" type="button" aria-label="Menu do usuário" class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-sm hover:bg-blue-200 transition-colors">
+                        👤
+                    </button>
+                    <div id="topbar-user-dropdown" class="hidden absolute right-0 mt-2 w-44 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg py-2 z-50">
+                        <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Meu Perfil</a>
+                        <button id="topbar-logout-button" type="button" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </header>
+<script>
+    (function () {
+        const token = localStorage.getItem('token');
+        const loginLink = document.getElementById('topbar-login-link');
+        const registerLink = document.getElementById('topbar-register-link');
+        const menuWrapper = document.getElementById('topbar-user-menu-wrapper');
+        const menuButton = document.getElementById('topbar-user-button');
+        const menuDropdown = document.getElementById('topbar-user-dropdown');
+        const logoutButton = document.getElementById('topbar-logout-button');
+
+        if (token) {
+            loginLink?.classList.add('hidden');
+            registerLink?.classList.add('hidden');
+            menuWrapper?.classList.remove('hidden');
+        }
+
+        menuButton?.addEventListener('click', function (event) {
+            event.stopPropagation();
+            menuDropdown?.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function (event) {
+            if (menuWrapper && !menuWrapper.contains(event.target)) {
+                menuDropdown?.classList.add('hidden');
+            }
+        });
+
+        logoutButton?.addEventListener('click', async function () {
+            const currentToken = localStorage.getItem('token');
+            if (currentToken) {
+                await fetch('/api/v1/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+            }
+            localStorage.removeItem('token');
+            window.location.href = '/auth/login';
+        });
+    })();
+</script>
 </body>
 </html>

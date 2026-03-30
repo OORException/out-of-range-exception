@@ -38,6 +38,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
+                .requestMatchers("/api/v1/auth/logout").authenticated()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
@@ -49,6 +51,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 
                 .requestMatchers("/api/v1/**").authenticated()
+
+                .requestMatchers("/profile").permitAll()
 
                 .anyRequest().authenticated()
             )

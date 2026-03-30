@@ -11,6 +11,7 @@ import br.edu.iff.ccc.webdev.repository.UserRepository;
 import br.edu.iff.ccc.webdev.security.JwtUtil;
 import br.edu.iff.ccc.webdev.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -85,5 +86,10 @@ public class AuthServiceImpl implements AuthService {
                 user.getFullName(),
                 token
         );
+    }
+
+    @Override
+    public void logout() {
+        SecurityContextHolder.clearContext();
     }
 }

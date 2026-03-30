@@ -28,6 +28,12 @@ public class UserController {
         return userService.getById(userId);
     }
 
+    @GetMapping("/me")
+    public UserResponse getCurrentUser() {
+        Long userId = securityUtils.getCurrentUserId();
+        return userService.getById(userId);
+    }
+
     @PatchMapping("/me")
     public UserResponse updateMyProfile(@Valid @RequestBody UpdateUserProfileRequest request) {
         Long userId = securityUtils.getCurrentUserId();
