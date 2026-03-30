@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="topbar" class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center gap-8">
+                <a th:href="@{/}" class="flex items-center gap-2 font-bold text-xl text-blue-600 hover:text-blue-700">
+                    <span class="text-2xl">💬</span>
+                    <span>FórumOnline</span>
+                </a>
+                <nav class="hidden md:flex items-center gap-1">
+                    <a th:href="@{/}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900">Início</a>
+                    <a th:href="@{/}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900">Categorias</a>
+                    <a th:href="@{/}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900">Chats</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-3">
+                <a th:href="@{/auth/login}" class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    Entrar
+                </a>
+                <a th:href="@{/auth/register}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                    Registrar
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+</body>
+</html>

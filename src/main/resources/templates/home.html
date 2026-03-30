@@ -1,392 +1,194 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Fórum Online</title>
-  </head>
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Fórum')}"></head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
 
-  <body>
-    <!-- Topbar -->
-    <header class="topbar">
-      <div class="topbar__left">
-        <a class="brand" href="#" aria-label="Voltar para o início">
-          <span class="brand__icon" a<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Fórum Online</title>
-  </head>
-
-  <body>
-    <!-- Topbar -->
-    <header class="topbar">
-      <div class="topbar__left">
-        <a class="brand" href="#" aria-label="Voltar para o início">
-          <span class="brand__icon" aria-hidden="true">↩</span>
-          <span class="brand__name">FórumOnline</span>
-        </a>
-
-        <nav class="nav" aria-label="Navegação principal">
-          <a class="nav__link is-active" href="#">Início</a>
-          <a class="nav__link" href="#">Categorias</a>
-          <a class="nav__link" href="#">Chats</a>
-          <a class="nav__link" href="#">Meu Perfil</a>
-        </nav>
-      </div>
-
-      <div class="topbar__right">
-        <a class="btn btn--primary" href="#">Criar Novo Tópico</a>
-        <button class="icon-btn" type="button" aria-label="Mensagens">💬</button>
-        <button class="icon-btn" type="button" aria-label="Notificações">🔔</button>
-        <button class="avatar-btn" type="button" aria-label="Menu do usuário">
-          <span class="avatar" aria-hidden="true">👤</span>
-        </button>
-      </div>
-    </header>
-
-    <!-- Conteúdo -->
-    <main class="container">
-      <section class="layout">
-        <!-- Coluna esquerda -->
-        <div class="layout__main">
-          <header class="page-header">
-            <h1>Tópicos Populares e Recentes</h1>
-          </header>
-
-          <section class="topics-grid" aria-label="Lista de tópicos populares">
-            <!-- Card 1 -->
-            <article class="topic-card">
-              <a class="topic-card__category" href="#">Desenvolvimento Web</a>
-              <h2 class="topic-card__title">
-                <a href="#">Qual o melhor framework para iniciantes em 2024?</a>
-              </h2>
-              <div class="topic-card__meta">
-                <span>32 postagens</span>
-                <span>última há 5min</span>
-              </div>
-            </article>
-
-            <!-- Card 2 -->
-            <article class="topic-card">
-              <a class="topic-card__category" href="#">Games</a>
-              <h2 class="topic-card__title">
-                <a href="#">Lançamentos mais esperados para o próximo semestre</a>
-              </h2>
-              <div class="topic-card__meta">
-                <span>112 postagens</span>
-                <span>última há 22min</span>
-              </div>
-            </article>
-
-            <!-- Card 3 -->
-            <article class="topic-card">
-              <a class="topic-card__category" href="#">Hardware</a>
-              <h2 class="topic-card__title">
-                <a href="#">RTX 4070 Super vs RX 7800 XT: qual vale mais a pena?</a>
-              </h2>
-              <div class="topic-card__meta">
-                <span>67 postagens</span>
-                <span>última há 1h</span>
-              </div>
-            </article>
-
-            <!-- Card 4 -->
-            <article class="topic-card">
-              <a class="topic-card__category" href="#">Carreiras</a>
-              <h2 class="topic-card__title">
-                <a href="#">Como se preparar para entrevistas técnicas em grandes empresas?</a>
-              </h2>
-              <div class="topic-card__meta">
-                <span>45 postagens</span>
-                <span>última há 3h</span>
-              </div>
-            </article>
-          </section>
-
-          <section class="realtime-chats" aria-label="Chats em tempo real">
-            <h2>Chats em Tempo Real</h2>
-
-            <div class="chat-list">
-              <!-- Chat 1 -->
-              <article class="chat-card">
-                <div class="chat-card__left">
-                  <span class="chat-card__icon" aria-hidden="true">⌁⌁</span>
-                  <div class="chat-card__info">
-                    <h3 class="chat-card__title">
-                      <a href="#">Desenvolvedores React</a>
-                    </h3>
-                    <p class="chat-card__subtitle">Tópico: Hooks e State Management</p>
-                  </div>
-                </div>
-
-                <div class="chat-card__right">
-                  <span class="chat-card__status">
-                    <span class="dot" aria-hidden="true">●</span>
-                    <span>23 Online</span>
-                  </span>
-                  <a class="btn" href="#">Entrar</a>
-                </div>
-              </article>
-
-              <!-- Chat 2 -->
-              <article class="chat-card">
-                <div class="chat-card__left">
-                  <span class="chat-card__icon" aria-hidden="true">🎮</span>
-                  <div class="chat-card__info">
-                    <h3 class="chat-card__title">
-                      <a href="#">Gamers de Plantão</a>
-                    </h3>
-                    <p class="chat-card__subtitle">Conversa livre sobre jogos</p>
-                  </div>
-                </div>
-
-                <div class="chat-card__right">
-                  <span class="chat-card__status">
-                    <span class="dot" aria-hidden="true">●</span>
-                    <span>42 Online</span>
-                  </span>
-                  <a class="btn" href="#">Entrar</a>
-                </div>
-              </article>
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center gap-8">
+                <a th:href="@{/}" class="flex items-center gap-2 font-bold text-xl text-blue-600 hover:text-blue-700">
+                    <span class="text-2xl">💬</span>
+                    <span>FórumOnline</span>
+                </a>
+                <nav class="hidden md:flex items-center gap-1">
+                    <a th:href="@{/home}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 bg-gray-100">Início</a>
+                    <a th:href="@{/}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900">Categorias</a>
+                    <a th:href="@{/}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900">Chats</a>
+                    <a th:href="@{/}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900">Meu Perfil</a>
+                </nav>
             </div>
-          </section>
+            <div class="flex items-center gap-3">
+                <a th:href="@{/}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                    Criar Novo Tópico
+                </a>
+                <button type="button" aria-label="Mensagens" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">💬</button>
+                <button type="button" aria-label="Notificações" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">🔔</button>
+                <button type="button" aria-label="Menu do usuário" class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-sm hover:bg-blue-200 transition-colors">👤</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col lg:flex-row gap-8">
+
+        <!-- Coluna principal -->
+        <div class="flex-1 min-w-0 space-y-8">
+
+            <!-- Tópicos Populares -->
+            <section>
+                <h1 class="text-2xl font-bold text-gray-900 mb-5">Tópicos Populares e Recentes</h1>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <article class="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                        <a href="#" class="inline-block text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full mb-2 hover:bg-blue-100">Desenvolvimento Web</a>
+                        <h2 class="text-base font-semibold text-gray-900 mb-3">
+                            <a href="#" class="hover:text-blue-600">Qual o melhor framework para iniciantes em 2024?</a>
+                        </h2>
+                        <div class="flex items-center gap-3 text-xs text-gray-500">
+                            <span>32 postagens</span>
+                            <span>·</span>
+                            <span>última há 5min</span>
+                        </div>
+                    </article>
+
+                    <article class="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                        <a href="#" class="inline-block text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full mb-2 hover:bg-purple-100">Games</a>
+                        <h2 class="text-base font-semibold text-gray-900 mb-3">
+                            <a href="#" class="hover:text-blue-600">Lançamentos mais esperados para o próximo semestre</a>
+                        </h2>
+                        <div class="flex items-center gap-3 text-xs text-gray-500">
+                            <span>112 postagens</span>
+                            <span>·</span>
+                            <span>última há 22min</span>
+                        </div>
+                    </article>
+
+                    <article class="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                        <a href="#" class="inline-block text-xs font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full mb-2 hover:bg-orange-100">Hardware</a>
+                        <h2 class="text-base font-semibold text-gray-900 mb-3">
+                            <a href="#" class="hover:text-blue-600">RTX 4070 Super vs RX 7800 XT: qual vale mais a pena?</a>
+                        </h2>
+                        <div class="flex items-center gap-3 text-xs text-gray-500">
+                            <span>67 postagens</span>
+                            <span>·</span>
+                            <span>última há 1h</span>
+                        </div>
+                    </article>
+
+                    <article class="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                        <a href="#" class="inline-block text-xs font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full mb-2 hover:bg-green-100">Carreiras</a>
+                        <h2 class="text-base font-semibold text-gray-900 mb-3">
+                            <a href="#" class="hover:text-blue-600">Como se preparar para entrevistas técnicas em grandes empresas?</a>
+                        </h2>
+                        <div class="flex items-center gap-3 text-xs text-gray-500">
+                            <span>45 postagens</span>
+                            <span>·</span>
+                            <span>última há 3h</span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Chats em Tempo Real -->
+            <section>
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Chats em Tempo Real</h2>
+
+                <div class="space-y-3">
+                    <article class="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between gap-4 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4 min-w-0">
+                            <span class="text-2xl shrink-0">💻</span>
+                            <div class="min-w-0">
+                                <h3 class="font-semibold text-gray-900 text-sm">
+                                    <a href="#" class="hover:text-blue-600">Desenvolvedores React</a>
+                                </h3>
+                                <p class="text-xs text-gray-500 truncate">Tópico: Hooks e State Management</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <span class="flex items-center gap-1.5 text-xs text-green-600 font-medium">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                23 Online
+                            </span>
+                            <a href="#" class="px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">Entrar</a>
+                        </div>
+                    </article>
+
+                    <article class="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between gap-4 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4 min-w-0">
+                            <span class="text-2xl shrink-0">🎮</span>
+                            <div class="min-w-0">
+                                <h3 class="font-semibold text-gray-900 text-sm">
+                                    <a href="#" class="hover:text-blue-600">Gamers de Plantão</a>
+                                </h3>
+                                <p class="text-xs text-gray-500 truncate">Conversa livre sobre jogos</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <span class="flex items-center gap-1.5 text-xs text-green-600 font-medium">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                42 Online
+                            </span>
+                            <a href="#" class="px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">Entrar</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
         </div>
 
-        <!-- Coluna direita -->
-        <aside class="layout__aside" aria-label="Barra lateral">
-          <section class="search">
-            <form action="#" method="get">
-              <label class="sr-only" for="q">Pesquisar</label>
-              <input id="q" name="q" type="search" placeholder="Procure um tópico ou chat..." />
-            </form>
-          </section>
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-72 shrink-0 space-y-5">
 
-          <section class="sidebar-card" aria-label="Em alta">
-            <h2>Em Alta</h2>
-            <ul class="sidebar-list">
-              <li><a href="#">Como o AI está mudando o mercado de trabalho?</a></li>
-              <li><a href="#">Dicas para otimizar builds de PC em 2024</a></li>
-              <li><a href="#">Melhores práticas de segurança para aplicações Node.js</a></li>
-            </ul>
-          </section>
-
-          <section class="sidebar-card" aria-label="Usuários ativos">
-            <h2>Usuários Ativos</h2>
-            <ul class="users">
-              <li class="user">
-                <span class="user__avatar" aria-hidden="true">🙂</span>
-                <span class="user__name">Carlos Silva</span>
-              </li>
-              <li class="user">
-                <span class="user__avatar" aria-hidden="true">🙂</span>
-                <span class="user__name">Ana Pereira</span>
-              </li>
-              <li class="user">
-                <span class="user__avatar" aria-hidden="true">🙂</span>
-                <span class="user__name">João Martins</span>
-              </li>
-            </ul>
-          </section>
-        </aside>
-      </section>
-    </main>
-
-    <!-- Rodapé -->
-    <footer class="footer">
-      <div class="footer__left">
-        <small>© 2024 Fórum Online. Todos os direitos reservados.</small>
-      </div>
-      <nav class="footer__right" aria-label="Links do rodapé">
-        <a href="#">Sobre</a>
-        <a href="#">Ajuda</a>
-        <a href="#">Termos</a>
-        <a href="#">Privacidade</a>
-      </nav>
-    </footer>
-  </body>
-</html>
-ria-hidden="true">↩</span>
-          <span class="brand__name">FórumOnline</span>
-        </a>
-
-        <nav class="nav" aria-label="Navegação principal">
-          <a class="nav__link is-active" href="#">Início</a>
-          <a class="nav__link" href="#">Categorias</a>
-          <a class="nav__link" href="#">Chats</a>
-          <a class="nav__link" href="#">Meu Perfil</a>
-        </nav>
-      </div>
-
-      <div class="topbar__right">
-        <a class="btn btn--primary" href="#">Criar Novo Tópico</a>
-        <button class="icon-btn" type="button" aria-label="Mensagens">💬</button>
-        <button class="icon-btn" type="button" aria-label="Notificações">🔔</button>
-        <button class="avatar-btn" type="button" aria-label="Menu do usuário">
-          <span class="avatar" aria-hidden="true">👤</span>
-        </button>
-      </div>
-    </header>
-
-    <!-- Conteúdo -->
-    <main class="container">
-      <section class="layout">
-        <!-- Coluna esquerda -->
-        <div class="layout__main">
-          <header class="page-header">
-            <h1>Tópicos Populares e Recentes</h1>
-          </header>
-
-          <section class="topics-grid" aria-label="Lista de tópicos populares">
-            <!-- Card 1 -->
-            <article class="topic-card">
-              <a class="topic-card__category" href="#">Desenvolvimento Web</a>
-              <h2 class="topic-card__title">
-                <a href="#">Qual o melhor framework para iniciantes em 2024?</a>
-              </h2>
-              <div class="topic-card__meta">
-                <span>32 postagens</span>
-                <span>última há 5min</span>
-              </div>
-            </article>
-
-            <!-- Card 2 -->
-            <article class="topic-card">
-              <a class="topic-card__category" href="#">Games</a>
-              <h2 class="topic-card__title">
-                <a href="#">Lançamentos mais esperados para o próximo semestre</a>
-              </h2>
-              <div class="topic-card__meta">
-                <span>112 postagens</span>
-                <span>última há 22min</span>
-              </div>
-            </article>
-
-            <!-- Card 3 -->
-            <article class="topic-card">
-              <a class="topic-card__category" href="#">Hardware</a>
-              <h2 class="topic-card__title">
-                <a href="#">RTX 4070 Super vs RX 7800 XT: qual vale mais a pena?</a>
-              </h2>
-              <div class="topic-card__meta">
-                <span>67 postagens</span>
-                <span>última há 1h</span>
-              </div>
-            </article>
-
-            <!-- Card 4 -->
-            <article class="topic-card">
-              <a class="topic-card__category" href="#">Carreiras</a>
-              <h2 class="topic-card__title">
-                <a href="#">Como se preparar para entrevistas técnicas em grandes empresas?</a>
-              </h2>
-              <div class="topic-card__meta">
-                <span>45 postagens</span>
-                <span>última há 3h</span>
-              </div>
-            </article>
-          </section>
-
-          <section class="realtime-chats" aria-label="Chats em tempo real">
-            <h2>Chats em Tempo Real</h2>
-
-            <div class="chat-list">
-              <!-- Chat 1 -->
-              <article class="chat-card">
-                <div class="chat-card__left">
-                  <span class="chat-card__icon" aria-hidden="true">⌁⌁</span>
-                  <div class="chat-card__info">
-                    <h3 class="chat-card__title">
-                      <a href="#">Desenvolvedores React</a>
-                    </h3>
-                    <p class="chat-card__subtitle">Tópico: Hooks e State Management</p>
-                  </div>
-                </div>
-
-                <div class="chat-card__right">
-                  <span class="chat-card__status">
-                    <span class="dot" aria-hidden="true">●</span>
-                    <span>23 Online</span>
-                  </span>
-                  <a class="btn" href="#">Entrar</a>
-                </div>
-              </article>
-
-              <!-- Chat 2 -->
-              <article class="chat-card">
-                <div class="chat-card__left">
-                  <span class="chat-card__icon" aria-hidden="true">🎮</span>
-                  <div class="chat-card__info">
-                    <h3 class="chat-card__title">
-                      <a href="#">Gamers de Plantão</a>
-                    </h3>
-                    <p class="chat-card__subtitle">Conversa livre sobre jogos</p>
-                  </div>
-                </div>
-
-                <div class="chat-card__right">
-                  <span class="chat-card__status">
-                    <span class="dot" aria-hidden="true">●</span>
-                    <span>42 Online</span>
-                  </span>
-                  <a class="btn" href="#">Entrar</a>
-                </div>
-              </article>
+            <!-- Busca -->
+            <div class="bg-white rounded-xl border border-gray-200 p-4">
+                <form action="#" method="get">
+                    <label class="sr-only" for="q">Pesquisar</label>
+                    <input
+                        id="q" name="q" type="search"
+                        placeholder="Procure um tópico ou chat..."
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                </form>
             </div>
-          </section>
-        </div>
 
-        <!-- Coluna direita -->
-        <aside class="layout__aside" aria-label="Barra lateral">
-          <section class="search">
-            <form action="#" method="get">
-              <label class="sr-only" for="q">Pesquisar</label>
-              <input id="q" name="q" type="search" placeholder="Procure um tópico ou chat..." />
-            </form>
-          </section>
+            <!-- Em Alta -->
+            <div class="bg-white rounded-xl border border-gray-200 p-4">
+                <h2 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <span>🔥</span> Em Alta
+                </h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-sm text-gray-700 hover:text-blue-600 line-clamp-2">Como o AI está mudando o mercado de trabalho?</a></li>
+                    <li><a href="#" class="text-sm text-gray-700 hover:text-blue-600 line-clamp-2">Dicas para otimizar builds de PC em 2024</a></li>
+                    <li><a href="#" class="text-sm text-gray-700 hover:text-blue-600 line-clamp-2">Melhores práticas de segurança para aplicações Node.js</a></li>
+                </ul>
+            </div>
 
-          <section class="sidebar-card" aria-label="Em alta">
-            <h2>Em Alta</h2>
-            <ul class="sidebar-list">
-              <li><a href="#">Como o AI está mudando o mercado de trabalho?</a></li>
-              <li><a href="#">Dicas para otimizar builds de PC em 2024</a></li>
-              <li><a href="#">Melhores práticas de segurança para aplicações Node.js</a></li>
-            </ul>
-          </section>
-
-          <section class="sidebar-card" aria-label="Usuários ativos">
-            <h2>Usuários Ativos</h2>
-            <ul class="users">
-              <li class="user">
-                <span class="user__avatar" aria-hidden="true">🙂</span>
-                <span class="user__name">Carlos Silva</span>
-              </li>
-              <li class="user">
-                <span class="user__avatar" aria-hidden="true">🙂</span>
-                <span class="user__name">Ana Pereira</span>
-              </li>
-              <li class="user">
-                <span class="user__avatar" aria-hidden="true">🙂</span>
-                <span class="user__name">João Martins</span>
-              </li>
-            </ul>
-          </section>
+            <!-- Usuários Ativos -->
+            <div class="bg-white rounded-xl border border-gray-200 p-4">
+                <h2 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <span>👥</span> Usuários Ativos
+                </h2>
+                <ul class="space-y-2">
+                    <li class="flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-sm">🙂</span>
+                        <span class="text-sm text-gray-700">Carlos Silva</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center text-sm">🙂</span>
+                        <span class="text-sm text-gray-700">Ana Pereira</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center text-sm">🙂</span>
+                        <span class="text-sm text-gray-700">João Martins</span>
+                    </li>
+                </ul>
+            </div>
         </aside>
-      </section>
-    </main>
+    </div>
+</main>
 
-    <!-- Rodapé -->
-    <footer class="footer">
-      <div class="footer__left">
-        <small>© 2024 Fórum Online. Todos os direitos reservados.</small>
-      </div>
-      <nav class="footer__right" aria-label="Links do rodapé">
-        <a href="#">Sobre</a>
-        <a href="#">Ajuda</a>
-        <a href="#">Termos</a>
-        <a href="#">Privacidade</a>
-      </nav>
-    </footer>
-  </body>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
 </html>

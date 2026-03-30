@@ -44,10 +44,12 @@ public class SecurityConfig {
                 .requestMatchers("/ws/**").permitAll() // WebSocket handshake
                 .requestMatchers("/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**").permitAll()
                 
+                .requestMatchers("/", "/home", "/auth/**", "/forum/**", "/chat/**", "/css/**", "/js/**").permitAll()
+
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                
+
                 .requestMatchers("/api/v1/**").authenticated()
-                
+
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
