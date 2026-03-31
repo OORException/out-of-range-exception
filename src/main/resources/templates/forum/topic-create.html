@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragments/head :: head('Novo Tópico')}"></head>
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <div th:replace="~{fragments/topbar :: topbar}"></div>
+
+    <main class="flex-1 max-w-2xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
+
+      <div class="mb-6">
+        <a th:href="@{/home}" class="text-sm text-gray-500 hover:text-gray-700">← Voltar</a>
+        <h1 class="text-2xl font-bold text-gray-900 mt-2">Criar Novo Tópico</h1>
+      </div>
+
+      <!-- Alerta de erro -->
+      <div id="error-banner" class="hidden mb-5 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700"></div>
+
+      <form id="topic-form" class="bg-white rounded-xl border border-gray-200 p-6 space-y-6">
+
+        <!-- Categoria -->
+        <div>
+          <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
+            Categoria <span class="text-red-500">*</span>
+          </label>
+          <select
+            id="category"
+            required
+            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+          >
+            <option value="">Carregando categorias…</option>
+          </select>
+        </div>
+
+        <!-- Título -->
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
+            Título <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="title"
+            type="text"
+            maxlength="140"
+            required
+            placeholder="Descreva o assunto em até 140 caracteres"
+            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <p class="mt-1 text-xs text-gray-400 text-right">
+            <span id="title-count">0</span>/140
+          </p>
+        </div>
+
+        <!-- Descrição -->
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+            Descrição
+          </label>
+          <textarea
+            id="description"
+            maxlength="2000"
+            rows="6"
+            placeholder="Detalhe o tópico (opcional)"
+            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
+          ></textarea>
+          <p class="mt-1 text-xs text-gray-400 text-right">
+            <span id="desc-count">0</span>/2000
+          </p>
+        </div>
+
+        <!-- Tags -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+          <div id="tags-container" class="flex flex-wrap gap-2 min-h-[2rem]">
+            <span class="text-xs text-gray-400">Carregando tags…</span>
+          </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <a
+            th:href="@{/home}"
+            class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Cancelar
+          </a>
+          <button
+            type="submit"
+            id="submit-btn"
+            class="px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Publicar Tópico
+          </button>
+        </div>
+      </form>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script th:inline="none">
+      (function () {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          window.location.href = '/auth/login';
+          return;
+        }
+
+        const headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+
+        // Contadores de caracteres
+        document.getElementById('title').addEventListener('input', function () {
+          document.getElementById('title-count').textContent = this.value.length;
+        });
+        document.getElementById('description').addEventListener('input', function () {
+          document.getElementById('desc-count').textContent = this.value.length;
+        });
+
+        // Carrega categorias
+        fetch('/api/v1/categories', { headers })
+          .then(r => r.json())
+          .then(categories => {
+            const sel = document.getElementById('category');
+            sel.innerHTML = '<option value="">Selecione uma categoria</option>';
+            categories.forEach(c => {
+              const opt = document.createElement('option');
+              opt.value = c.id;
+              opt.textContent = c.name;
+              sel.appendChild(opt);
+            });
+          })
+          .catch(() => showError('Não foi possível carregar as categorias.'));
+
+        // Carrega tags
+        fetch('/api/v1/tags', { headers })
+          .then(r => r.json())
+          .then(tags => {
+            const container = document.getElementById('tags-container');
+            if (tags.length === 0) {
+              container.innerHTML = '<span class="text-xs text-gray-400">Nenhuma tag disponível.</span>';
+              return;
+            }
+            container.innerHTML = '';
+            tags.forEach(tag => {
+              const label = document.createElement('label');
+              label.className = 'inline-flex items-center gap-1.5 cursor-pointer select-none';
+
+              const cb = document.createElement('input');
+              cb.type = 'checkbox';
+              cb.value = tag.id;
+              cb.className = 'hidden peer';
+              cb.id = 'tag-' + tag.id;
+
+              const span = document.createElement('span');
+              span.textContent = tag.name;
+              span.className = [
+                'px-3 py-1 rounded-full text-xs font-medium border transition-colors',
+                'border-gray-300 text-gray-600 bg-white',
+                'peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600'
+              ].join(' ');
+
+              // toggle visual ao clicar
+              label.addEventListener('click', () => {
+                cb.checked = !cb.checked;
+                if (cb.checked) {
+                  span.classList.remove('border-gray-300', 'text-gray-600', 'bg-white');
+                  span.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+                } else {
+                  span.classList.add('border-gray-300', 'text-gray-600', 'bg-white');
+                  span.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+                }
+              });
+
+              label.appendChild(cb);
+              label.appendChild(span);
+              container.appendChild(label);
+            });
+          })
+          .catch(() => {
+            document.getElementById('tags-container').innerHTML =
+              '<span class="text-xs text-gray-400">Não foi possível carregar as tags.</span>';
+          });
+
+        // Submit
+        document.getElementById('topic-form').addEventListener('submit', async function (e) {
+          e.preventDefault();
+          hideError();
+
+          const categoryId = document.getElementById('category').value;
+          const title = document.getElementById('title').value.trim();
+          const description = document.getElementById('description').value.trim();
+          const tagIds = Array.from(
+            document.querySelectorAll('#tags-container input[type=checkbox]:checked')
+          ).map(cb => Number(cb.value));
+
+          if (!categoryId) { showError('Selecione uma categoria.'); return; }
+          if (!title) { showError('O título é obrigatório.'); return; }
+
+          const btn = document.getElementById('submit-btn');
+          btn.disabled = true;
+          btn.textContent = 'Publicando…';
+
+          try {
+            const res = await fetch('/api/v1/topics', {
+              method: 'POST',
+              headers,
+              body: JSON.stringify({
+                categoryId: Number(categoryId),
+                title,
+                description: description || null,
+                tagIds: tagIds.length > 0 ? tagIds : null
+              })
+            });
+
+            if (!res.ok) {
+              const err = await res.json().catch(() => ({}));
+              throw new Error(err.message || 'Erro ao criar tópico.');
+            }
+
+            const topic = await res.json();
+            window.location.href = '/forum/topics/' + topic.id;
+          } catch (err) {
+            showError(err.message);
+            btn.disabled = false;
+            btn.textContent = 'Publicar Tópico';
+          }
+        });
+
+        function showError(msg) {
+          const el = document.getElementById('error-banner');
+          el.textContent = msg;
+          el.classList.remove('hidden');
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function hideError() {
+          document.getElementById('error-banner').classList.add('hidden');
+        }
+      })();
+    </script>
+  </body>
+</html>

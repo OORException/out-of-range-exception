@@ -1,17 +1,15 @@
 package br.edu.iff.ccc.webdev.controller.view;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
 public class MainViewController {
-    
-    @GetMapping()
-    public String paginaPrincipal() {
-        return "index.html";
-    }
 
+    @GetMapping
+    public String index() {
+        return "redirect:/home";
+    }
 }
