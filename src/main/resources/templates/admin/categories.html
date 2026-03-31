@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Admin - Categorias')}"></head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+<div th:replace="~{fragments/topbar :: topbar}"></div>
+<main class="flex-1 max-w-5xl mx-auto px-4 py-10">
+  <div class="mb-8">
+    <h1 class="text-3xl font-semibold text-gray-900">Administração de Categorias</h1>
+    <p class="text-sm text-gray-500 mt-2">Cadastre novas categorias e veja as categorias existentes.</p>
+  </div>
+
+  <div th:if="${successMessage}" class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700">
+    <p th:text="${successMessage}"></p>
+  </div>
+  <div th:if="${errorMessage}" class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+    <p th:text="${errorMessage}"></p>
+  </div>
+
+  <section class="grid gap-8 lg:grid-cols-2">
+    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Nova Categoria</h2>
+      <form id="category-form" class="space-y-5">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nome</label>
+          <input id="name" name="name" required type="text" class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" placeholder="Ex: Java" />
+        </div>
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+          <textarea id="description" name="description" rows="4" class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" placeholder="Descrição opcional"></textarea>
+        </div>
+        <div id="category-error" class="hidden text-sm text-red-700"></div>
+        <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition">Salvar Categoria</button>
+      </form>
+    </div>
+
+    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Categorias Existentes</h2>
+      <div th:if="${#lists.isEmpty(categories)}" class="text-gray-500">Nenhuma categoria cadastrada ainda.</div>
+      <ul class="space-y-3" th:if="${!#lists.isEmpty(categories)}">
+        <li th:each="category : ${categories}" class="rounded-2xl border border-gray-200 p-4">
+          <div class="font-semibold text-gray-900" th:text="${category.name}"></div>
+          <p class="text-sm text-gray-500 mt-1" th:text="${category.description != null && !#strings.isEmpty(category.description) ? category.description : 'Sem descrição.'}"></p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script>
+  document.getElementById('category-form').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const errorEl = document.getElementById('category-error');
+
+    errorEl.classList.add('hidden');
+    errorEl.textContent = '';
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      errorEl.textContent = 'Você precisa estar autenticado como administrador para cadastrar categorias.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/v1/admin/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ name, description: description || null })
+      });
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        errorEl.textContent = body.message || 'Erro ao salvar a categoria.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      window.location.href = '/admin/categories?successMessage=' + encodeURIComponent('Categoria salva com sucesso!');
+    } catch (error) {
+      errorEl.textContent = 'Erro de conexão ao salvar a categoria.';
+      errorEl.classList.remove('hidden');
+    }
+  });
+</script>
+</body>
+</html>

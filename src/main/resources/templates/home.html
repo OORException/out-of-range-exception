@@ -32,6 +32,7 @@
               <span id="home-admin-divider" class="hidden text-gray-300 select-none">|</span>
               <a id="home-admin-categories" th:href="@{/admin/categories}" class="hidden px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700">Categorias</a>
               <a id="home-admin-tags" th:href="@{/admin/tags}" class="hidden px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700">Tags</a>
+              <a id="home-admin-topics" th:href="@{/admin/topics}" class="hidden px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700">Tópicos</a>
               <a id="home-admin-users" th:href="@{/admin/users}" class="hidden px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700">Usuários</a>
             </nav>
           </div>
@@ -142,6 +143,7 @@
             document.getElementById("home-admin-divider")?.classList.remove("hidden");
             document.getElementById("home-admin-categories")?.classList.remove("hidden");
             document.getElementById("home-admin-tags")?.classList.remove("hidden");
+            document.getElementById("home-admin-topics")?.classList.remove("hidden");
             document.getElementById("home-admin-users")?.classList.remove("hidden");
             document.getElementById("home-admin-panel-link")?.classList.remove("hidden");
             document.getElementById("home-admin-panel-link")?.classList.add("block");

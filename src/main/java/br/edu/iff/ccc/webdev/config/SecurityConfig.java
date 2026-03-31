@@ -1,7 +1,7 @@
 package br.edu.iff.ccc.webdev.config;
 
-import br.edu.iff.ccc.webdev.security.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +21,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
+import br.edu.iff.ccc.webdev.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -46,7 +47,7 @@ public class SecurityConfig {
                 .requestMatchers("/ws/**").permitAll() // WebSocket handshake
                 .requestMatchers("/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**").permitAll()
                 
-                .requestMatchers("/", "/home", "/auth/**", "/forum/**", "/chat/**", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/", "/home", "/auth/**", "/forum/**", "/chat/**", "/css/**", "/js/**", "/admin/**").permitAll()
 
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 
