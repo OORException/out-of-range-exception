@@ -75,6 +75,16 @@ public class ChatServiceImpl implements ChatService {
     @Override
     @Transactional
     public ChatMessageResponse sendMessage(SendChatMessageRequest request) {
+        return sendMessageInternal(request, null);
+    }
+
+    @Override
+    @Transactional
+    public ChatMessageResponse sendMessageAsUser(SendChatMessageRequest request, String userEmail) {
+        return sendMessageInternal(request, userEmail);
+    }
+
+    private ChatMessageResponse sendMessageInternal(SendChatMessageRequest request, String userEmail) {
         Chat chat = chatRepository.findById(request.chatId())
                 .orElseThrow(() -> new NotFoundException("Chat not found with id: " + request.chatId()));
 
@@ -82,9 +92,15 @@ public class ChatServiceImpl implements ChatService {
             throw new BadRequestException("Chat is not active");
         }
 
-        Long userId = securityUtils.getCurrentUserId();
-        User sender = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+        User sender;
+        if (userEmail != null && !userEmail.isBlank()) {
+            sender = userRepository.findByEmail(userEmail)
+                    .orElseThrow(() -> new NotFoundException("User not found: " + userEmail));
+        } else {
+            Long userId = securityUtils.getCurrentUserId();
+            sender = userRepository.findById(userId)
+                    .orElseThrow(() -> new NotFoundException("User not found"));
+        }
 
         ChatMessage message = ChatMessage.builder()
                 .chat(chat)

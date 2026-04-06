@@ -9,4 +9,5 @@ public interface ChatService {
     Long createChatForTopic(Long topicId);
     List<ChatMessageResponse> listMessages(Long chatId);
     ChatMessageResponse sendMessage(SendChatMessageRequest request);
+    ChatMessageResponse sendMessageAsUser(SendChatMessageRequest request, String userEmail);
 }

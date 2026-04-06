@@ -6,7 +6,6 @@ import br.edu.iff.ccc.webdev.model.entity.ChatMessage;
 import br.edu.iff.ccc.webdev.repository.ChatMessageRepository;
 import br.edu.iff.ccc.webdev.repository.ChatRepository;
 import br.edu.iff.ccc.webdev.service.chat.ChatParticipationService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -40,7 +39,7 @@ public class ChatViewController {
 
         List<ChatMessage> messages = chatMessageRepository.findByChatIdOrderBySentAtAsc(chatId);
         long participantCount = chatParticipationService.countActiveParticipants(chatId);
-        String token = extractTokenFromCookie(request);
+        boolean authenticated = request.getUserPrincipal() != null;
 
         model.addAttribute("chat", chat);
         model.addAttribute("topicId", chat.getTopic().getId());
@@ -48,17 +47,7 @@ public class ChatViewController {
         model.addAttribute("messages", messages);
         model.addAttribute("participantCount", participantCount);
         model.addAttribute("timeFmt", TIME_FMT);
-        model.addAttribute("token", token);
+        model.addAttribute("authenticated", authenticated);
         return "chat/room";
-    }
-
-    private String extractTokenFromCookie(HttpServletRequest request) {
-        if (request.getCookies() == null) return "";
-        for (Cookie cookie : request.getCookies()) {
-            if ("token".equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        return "";
     }
 }

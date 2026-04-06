@@ -89,7 +89,7 @@
 <script th:inline="javascript">
 /*<![CDATA[*/
 const CHAT_ID   = /*[[${chat.id}]]*/ 0;
-const TOKEN     = /*[[${token}]]*/ '';
+const IS_AUTHENTICATED = /*[[${authenticated}]]*/ false;
 const TOPIC_URL = '/topic/chat/' + CHAT_ID;
 const EVENTS_URL = '/topic/chat/' + CHAT_ID + '/events';
 
@@ -113,8 +113,8 @@ function scrollToBottom() {
 }
 scrollToBottom();
 
-// Se não há token, mostrar aviso de login
-if (!TOKEN) {
+// Se não está autenticado, mostrar aviso de login
+if (!IS_AUTHENTICATED) {
   loginNotice.classList.remove('hidden');
 } else {
   joinAndConnect();
@@ -149,7 +149,7 @@ async function joinAndConnect() {
 }
 
 function initWebSocket() {
-  const socket = new SockJS('/ws?token=' + TOKEN);
+  const socket = new SockJS('/ws');
   stompClient = new StompJs.Client({
     webSocketFactory: () => socket,
     reconnectDelay: 5000,
@@ -168,6 +168,13 @@ function initWebSocket() {
       stompClient.subscribe(EVENTS_URL, function(frame) {
         const event = JSON.parse(frame.body);
         handleEvent(event);
+      });
+
+      // Erros do backend WebSocket (ex.: autorização/validação)
+      stompClient.subscribe('/user/queue/errors', function(frame) {
+        const err = JSON.parse(frame.body || '{}');
+        wsStatus.classList.remove('hidden');
+        wsStatus.textContent = err.message || 'Falha ao processar mensagem no chat.';
       });
     },
     onDisconnect: () => {
@@ -293,7 +300,7 @@ function escapeHtml(str) {
 }
 
 window.addEventListener('beforeunload', function () {
-  if (!TOKEN) return;
+  if (!IS_AUTHENTICATED) return;
   navigator.sendBeacon(LEAVE_URL);
 });
 /*]]>*/

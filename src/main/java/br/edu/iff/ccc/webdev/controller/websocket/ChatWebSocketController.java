@@ -1,8 +1,8 @@
 package br.edu.iff.ccc.webdev.controller.websocket;
 
-import br.edu.iff.ccc.webdev.dto.request.chat.SendChatMessageRequest;
 import br.edu.iff.ccc.webdev.dto.websocket.ChatEventDto;
 import br.edu.iff.ccc.webdev.dto.websocket.SendMessageRequest;
+import br.edu.iff.ccc.webdev.dto.request.chat.SendChatMessageRequest;
 import br.edu.iff.ccc.webdev.exception.ForbiddenException;
 import br.edu.iff.ccc.webdev.model.support.ChatParticipation;
 import br.edu.iff.ccc.webdev.repository.ChatParticipationRepository;
@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Controller WebSocket para gerenciar comunicação em tempo real do chat
@@ -44,17 +45,14 @@ public class ChatWebSocketController {
             @Valid @Payload SendMessageRequest request,
             Authentication authentication) {
 
-        String userEmail = authentication.getName();
+        String userEmail = Objects.requireNonNull(authentication, "Authentication is required").getName();
         log.info("User {} sending message to chat {}", userEmail, chatId);
 
         validateParticipation(chatId, userEmail);
-
-        SendChatMessageRequest serviceRequest = new SendChatMessageRequest(
-                chatId,
-                request.getContent()
+        chatService.sendMessageAsUser(
+                new SendChatMessageRequest(chatId, request.getContent()),
+                userEmail
         );
-
-        chatService.sendMessage(serviceRequest);
     }
 
     /**
