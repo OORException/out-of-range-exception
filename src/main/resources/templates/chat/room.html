@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Chat')}"></head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+<div th:replace="~{fragments/topbar :: topbar}"></div>
+
+<main class="flex-1 max-w-4xl mx-auto w-full px-4 py-6 flex flex-col" style="min-height: calc(100vh - 9rem);">
+
+  <!-- Cabeçalho do chat -->
+  <div class="bg-white rounded-2xl border border-gray-200 p-4 mb-4 flex items-center justify-between">
+    <div>
+      <div class="flex items-center gap-2 mb-1">
+        <a th:href="@{/forum/topics/{id}(id=${topicId})}" class="text-sm text-gray-500 hover:text-blue-600">
+          ← <span th:text="${topicTitle}">Tópico</span>
+        </a>
+      </div>
+      <h1 class="text-lg font-bold text-gray-900" th:text="${chat.name}">Chat</h1>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+      <span id="participant-count" class="text-sm text-gray-500">
+        <span th:text="${participantCount}">0</span> online
+      </span>
+    </div>
+  </div>
+
+  <!-- Área de mensagens -->
+  <div id="messages-container"
+       class="flex-1 bg-white rounded-2xl border border-gray-200 p-4 overflow-y-auto mb-4 space-y-3"
+       style="min-height: 400px; max-height: 60vh;">
+
+    <div th:if="${#lists.isEmpty(messages)}" id="empty-msg" class="flex items-center justify-center h-full text-gray-400 text-sm">
+      Seja o primeiro a enviar uma mensagem!
+    </div>
+
+    <!-- Mensagens existentes (carregadas pelo servidor) -->
+    <div th:each="msg : ${messages}"
+         th:data-msg-id="${msg.id}"
+         class="flex flex-col">
+      <div class="flex items-baseline gap-2">
+        <span class="font-semibold text-sm text-blue-700" th:text="${msg.sender.username}"></span>
+        <span class="text-xs text-gray-400" th:text="${timeFmt.format(msg.sentAt)}"></span>
+        <span th:if="${msg.status.name() == 'EDITED'}" class="text-xs text-gray-300 italic">(editado)</span>
+      </div>
+      <p class="text-sm text-gray-800 mt-0.5 leading-relaxed" th:text="${msg.content}"></p>
+    </div>
+  </div>
+
+  <!-- Status de conexão -->
+  <div id="ws-status" class="text-xs text-center text-gray-400 mb-2 hidden">
+    Reconectando ao chat...
+  </div>
+
+  <!-- Indicador de digitação -->
+  <div id="typing-indicator" class="text-xs text-gray-400 mb-2 h-4"></div>
+
+  <!-- Formulário de envio -->
+  <div class="bg-white rounded-2xl border border-gray-200 p-3 flex gap-2">
+    <input
+      id="message-input"
+      type="text"
+      maxlength="4000"
+      placeholder="Digite sua mensagem..."
+      class="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      autocomplete="off"
+    />
+    <button
+      id="send-btn"
+      disabled
+      class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+    >
+      Enviar
+    </button>
+  </div>
+
+  <!-- Aviso para usuários não autenticados -->
+  <div id="login-notice" class="hidden mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-xl text-sm text-yellow-700 text-center">
+    <a th:href="@{/auth/login}" class="font-medium text-yellow-800 hover:underline">Faça login</a> para participar do chat.
+  </div>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- SockJS + STOMP.js via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+const CHAT_ID   = /*[[${chat.id}]]*/ 0;
+const TOKEN     = /*[[${token}]]*/ '';
+const TOPIC_URL = '/topic/chat/' + CHAT_ID;
+const EVENTS_URL = '/topic/chat/' + CHAT_ID + '/events';
+
+const messagesContainer = document.getElementById('messages-container');
+const messageInput      = document.getElementById('message-input');
+const sendBtn           = document.getElementById('send-btn');
+const typingIndicator   = document.getElementById('typing-indicator');
+const wsStatus          = document.getElementById('ws-status');
+const loginNotice       = document.getElementById('login-notice');
+const emptyMsg          = document.getElementById('empty-msg');
+const JOIN_URL          = '/api/v1/chats/' + CHAT_ID + '/participants/join';
+const LEAVE_URL         = '/api/v1/chats/' + CHAT_ID + '/participants/leave';
+
+let stompClient = null;
+let typingTimeout = null;
+let isTyping = false;
+
+// Scroll para o final
+function scrollToBottom() {
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+scrollToBottom();
+
+// Se não há token, mostrar aviso de login
+if (!TOKEN) {
+  loginNotice.classList.remove('hidden');
+} else {
+  joinAndConnect();
+}
+
+async function joinAndConnect() {
+  try {
+    const res = await fetch(JOIN_URL, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' }
+    });
+
+    // 409 = usuário já ativo no chat; é um cenário válido
+    if (res.ok || res.status === 409) {
+      initWebSocket();
+      return;
+    }
+
+    if (res.status === 401 || res.status === 403) {
+      loginNotice.classList.remove('hidden');
+      wsStatus.classList.remove('hidden');
+      wsStatus.textContent = 'Sessão inválida para entrar no chat. Faça login novamente.';
+      return;
+    }
+
+    wsStatus.classList.remove('hidden');
+    wsStatus.textContent = 'Não foi possível entrar no chat agora.';
+  } catch {
+    wsStatus.classList.remove('hidden');
+    wsStatus.textContent = 'Falha de rede ao entrar no chat.';
+  }
+}
+
+function initWebSocket() {
+  const socket = new SockJS('/ws?token=' + TOKEN);
+  stompClient = new StompJs.Client({
+    webSocketFactory: () => socket,
+    reconnectDelay: 5000,
+    onConnect: () => {
+      wsStatus.classList.add('hidden');
+      sendBtn.disabled = false;
+
+      // Inscrever em novas mensagens
+      stompClient.subscribe(TOPIC_URL, function(frame) {
+        const msg = JSON.parse(frame.body);
+        renderMessage(msg);
+        scrollToBottom();
+      });
+
+      // Inscrever em eventos (join/leave/typing)
+      stompClient.subscribe(EVENTS_URL, function(frame) {
+        const event = JSON.parse(frame.body);
+        handleEvent(event);
+      });
+    },
+    onDisconnect: () => {
+      sendBtn.disabled = true;
+      wsStatus.classList.remove('hidden');
+    },
+    onStompError: (frame) => {
+      console.error('STOMP error:', frame);
+      wsStatus.classList.remove('hidden');
+      wsStatus.textContent = 'Erro na conexão do chat. Recarregue a página.';
+      sendBtn.disabled = true;
+    }
+  });
+  stompClient.activate();
+}
+
+function renderMessage(msg) {
+  if (emptyMsg) emptyMsg.classList.add('hidden');
+
+  const now = new Date();
+  const timeStr = msg.timestamp
+    ? new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+    : now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+  const div = document.createElement('div');
+  div.setAttribute('data-msg-id', msg.messageId || '');
+  div.classList.add('flex', 'flex-col');
+  div.innerHTML = `
+    <div class="flex items-baseline gap-2">
+      <span class="font-semibold text-sm text-blue-700">${escapeHtml(msg.senderUsername || 'Usuário')}</span>
+      <span class="text-xs text-gray-400">${timeStr}</span>
+    </div>
+    <p class="text-sm text-gray-800 mt-0.5 leading-relaxed">${escapeHtml(msg.content || '')}</p>
+  `;
+  messagesContainer.appendChild(div);
+}
+
+function handleEvent(event) {
+  if (!event || !event.type) return;
+  const type = event.type;
+  const username = event.username || 'Usuário';
+
+  if (type === 'TYPING') {
+    typingIndicator.textContent = username + ' está digitando...';
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => { typingIndicator.textContent = ''; }, 3000);
+  } else if (type === 'STOP_TYPING') {
+    typingIndicator.textContent = '';
+  } else if (type === 'JOIN') {
+    appendSystemMsg(username + ' entrou no chat.');
+    updateParticipantCount(event.participantCount);
+  } else if (type === 'LEAVE') {
+    appendSystemMsg(username + ' saiu do chat.');
+    updateParticipantCount(event.participantCount);
+  }
+}
+
+function appendSystemMsg(text) {
+  const div = document.createElement('div');
+  div.className = 'text-xs text-center text-gray-400 py-1';
+  div.textContent = text;
+  messagesContainer.appendChild(div);
+  scrollToBottom();
+}
+
+function updateParticipantCount(count) {
+  const el = document.getElementById('participant-count');
+  if (el && count != null) {
+    el.innerHTML = count + ' online';
+  }
+}
+
+// Envio de mensagem
+function sendMessage() {
+  const content = messageInput.value.trim();
+  if (!content || !stompClient || !stompClient.connected) return;
+
+  stompClient.publish({
+    destination: '/app/chat/' + CHAT_ID + '/send',
+    body: JSON.stringify({ chatId: CHAT_ID, content: content })
+  });
+
+  messageInput.value = '';
+  stopTyping();
+}
+
+sendBtn.addEventListener('click', sendMessage);
+messageInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// Indicador de digitação
+messageInput.addEventListener('input', function() {
+  if (!stompClient || !stompClient.connected) return;
+  if (!isTyping && this.value.length > 0) {
+    isTyping = true;
+    stompClient.publish({
+      destination: '/app/chat/' + CHAT_ID + '/typing',
+      body: '{}'
+    });
+  }
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(stopTyping, 2000);
+});
+
+function stopTyping() {
+  if (isTyping && stompClient && stompClient.connected) {
+    isTyping = false;
+    stompClient.publish({
+      destination: '/app/chat/' + CHAT_ID + '/stop-typing',
+      body: '{}'
+    });
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+
+window.addEventListener('beforeunload', function () {
+  if (!TOKEN) return;
+  navigator.sendBeacon(LEAVE_URL);
+});
+/*]]>*/
+</script>
+</body>
+</html>
