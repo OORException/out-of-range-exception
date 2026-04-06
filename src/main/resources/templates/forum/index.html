@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Fórum')}"></head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-slate-800">
 <div th:replace="~{fragments/topbar :: topbar}"></div>
 
-<main class="flex-1 max-w-6xl mx-auto px-4 py-10 w-full">
+<main class="flex-1 content-shell px-4 py-10 w-full">
   <div class="flex flex-col lg:flex-row gap-8">
 
     <!-- Coluna principal: tópicos -->
@@ -24,8 +24,8 @@
 
       <!-- Sem tópicos -->
       <div th:if="${#lists.isEmpty(topics)}"
-           class="bg-white rounded-2xl border border-gray-200 p-12 text-center">
-        <div class="text-4xl mb-3">💬</div>
+          class="surface-card p-12 text-center">
+        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-100 text-xs font-extrabold tracking-wider text-brand-700 mb-3">FORUM</div>
         <p class="text-gray-500 font-medium">Nenhum tópico encontrado.</p>
         <p class="text-gray-400 text-sm mt-1"
            th:if="${selectedCategoryId != null}">Tente remover o filtro de categoria.</p>
@@ -39,7 +39,7 @@
       <div class="space-y-3" th:if="${!#lists.isEmpty(topics)}">
         <a th:each="topic : ${topics}"
            th:href="@{/forum/topics/{id}(id=${topic.id})}"
-           class="block bg-white rounded-2xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-sm transition-all group">
+           class="block surface-card p-5 hover:border-blue-300 hover:shadow-sm transition-all group">
           <div class="flex items-start justify-between gap-3">
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 mb-1">
@@ -63,7 +63,7 @@
 
     <!-- Sidebar: categorias -->
     <aside class="lg:w-64 flex-shrink-0">
-      <div class="bg-white rounded-2xl border border-gray-200 p-5">
+      <div class="surface-card p-5">
         <h2 class="font-semibold text-gray-900 mb-4">Categorias</h2>
         <nav class="space-y-1">
           <a th:href="@{/forum}"

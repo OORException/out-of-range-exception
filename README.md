@@ -4,9 +4,17 @@
 
 Sistema completo de fórum desenvolvido com Spring Boot, oferecendo autenticação JWT, controle de acesso baseado em roles (USER/ADMIN), categorias, tópicos, posts, likes e chats em grupo.
 
-## Quick Start
+## 3. Documentacao Final (README.md)
 
-### 1. Configurar Ambiente
+### Manual de Execucao (rodar localmente)
+
+#### 1. Pre-requisitos
+
+- Java 21
+- Maven 3.9+
+- Docker e Docker Compose (opcional)
+
+#### 2. Configurar ambiente
 
 Copie `.env.example` para `.env`:
 
@@ -14,17 +22,31 @@ Copie `.env.example` para `.env`:
 cp .env.example .env
 ```
 
-O arquivo contém configurações do banco de dados e JWT (não commitar).
+O arquivo contem configuracoes do banco e JWT (nao commitar).
 
-### 2. Executar
+#### 3. Executar localmente com Maven
 
 ```bash
-./mvnw spring-boot:run
+mvn clean spring-boot:run
 ```
 
-Aplicação disponível em: **http://localhost:8080**
+Aplicacao disponivel em: **http://localhost:8080**
 
-### 3. Primeiro Acesso
+#### 4. Executar com Docker
+
+```bash
+docker compose up -d --build
+```
+
+Aplicacao disponivel em: **http://localhost:8080**
+
+Para parar:
+
+```bash
+docker compose down
+```
+
+#### 5. Primeiro acesso (API)
 
 **Registrar usuário:**
 ```bash

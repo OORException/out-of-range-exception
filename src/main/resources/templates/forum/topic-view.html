@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
   <head th:replace="~{fragments/head :: head(${topic.title})}"></head>
-  <body class="bg-gray-50 min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col text-slate-800">
 
     <div th:replace="~{fragments/topbar :: topbar}"></div>
 
-    <main class="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    <main class="flex-1 content-shell max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6">
 
       <!-- Breadcrumb -->
       <nav class="text-sm text-gray-500 flex items-center gap-1.5">
@@ -17,7 +17,7 @@
       </nav>
 
       <!-- Cabeçalho do tópico -->
-      <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <div class="surface-card p-6">
         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div class="flex-1 min-w-0">
             <!-- Categoria -->
@@ -69,7 +69,7 @@
               th:href="@{/chat/{id}(id=${chatId})}"
               class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
             >
-              💬 Entrar no Chat
+              Entrar no Chat
             </a>
 
             <button
@@ -77,7 +77,7 @@
               id="create-chat-btn"
               class="hidden inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              💬 Criar Chat
+              Criar Chat
             </button>
           </div>
         </div>
@@ -91,7 +91,7 @@
         <!-- Estado vazio -->
         <div
           th:if="${#lists.isEmpty(posts)}"
-          class="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-400 text-sm"
+          class="surface-card p-8 text-center text-gray-400 text-sm"
         >
           Nenhuma resposta ainda. Seja o primeiro a responder!
         </div>
@@ -100,7 +100,7 @@
           <article
             th:each="post, iter : ${posts}"
             th:id="'post-' + ${post.id}"
-            class="bg-white rounded-xl border border-gray-200 p-5"
+            class="surface-card p-5"
           >
             <div class="flex items-start gap-4">
               <!-- Avatar -->
@@ -170,7 +170,7 @@
                     th:data-post-id="${post.id}"
                     class="like-btn flex items-center gap-1.5 text-xs text-gray-500 hover:text-red-500 transition-colors"
                   >
-                    <span class="like-icon">🤍</span>
+                    <span class="like-icon">Curtir</span>
                     <span th:id="'like-count-' + ${post.id}" th:text="${post.likeCount}"></span>
                   </button>
                 </div>
@@ -183,7 +183,7 @@
       <!-- Área de resposta -->
       <section id="reply-section" class="hidden">
         <h2 class="text-base font-semibold text-gray-700 mb-3">Sua Resposta</h2>
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="surface-card p-5">
           <div id="reply-error" class="hidden mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700"></div>
           <textarea
             id="reply-content"
@@ -203,7 +203,7 @@
       </section>
 
       <!-- Prompt de login para não autenticados -->
-      <div id="login-prompt" class="hidden bg-white rounded-xl border border-gray-200 p-6 text-center">
+      <div id="login-prompt" class="hidden surface-card p-6 text-center">
         <p class="text-sm text-gray-600 mb-3">Faça login para deixar sua resposta.</p>
         <a th:href="@{/auth/login}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
           Entrar
@@ -267,7 +267,7 @@
             fetch('/api/v1/posts/' + postId + '/likes/check')
               .then(r => r.ok ? r.json() : false)
               .then(liked => {
-                btn.querySelector('.like-icon').textContent = liked ? '❤️' : '🤍';
+                btn.querySelector('.like-icon').textContent = liked ? 'Curtido' : 'Curtir';
                 btn.dataset.liked = liked;
               }).catch(() => {});
           });
@@ -289,7 +289,7 @@
             window.location.href = '/chat/' + chatId;
           } catch {
             btn.disabled = false;
-            btn.textContent = '💬 Criar Chat';
+            btn.textContent = 'Criar Chat';
             alert('Não foi possível criar o chat para este tópico.');
           }
         });
@@ -310,7 +310,7 @@
               const current = parseInt(countEl.textContent) || 0;
               countEl.textContent = liked ? current - 1 : current + 1;
               btn.dataset.liked = !liked;
-              btn.querySelector('.like-icon').textContent = liked ? '🤍' : '❤️';
+              btn.querySelector('.like-icon').textContent = liked ? 'Curtir' : 'Curtido';
             } catch {}
           });
         });

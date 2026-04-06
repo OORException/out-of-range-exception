@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Início')}"></head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-slate-800">
 
 <div th:replace="~{fragments/topbar :: topbar}"></div>
 
-<main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+<main class="flex-1 content-shell w-full px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex flex-col lg:flex-row gap-8">
 
         <!-- Coluna principal -->
@@ -22,7 +22,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <article
                         th:each="topic : ${topicCards}"
-                        class="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow"
+                        class="surface-card p-5 hover:shadow-md transition-shadow"
                     >
                         <a
                             th:href="@{/forum/topics/{id}(id=${topic.id})}"
@@ -56,10 +56,10 @@
                 <div class="space-y-3">
                     <article
                         th:each="chat : ${chatCards}"
-                        class="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between gap-4 hover:shadow-md transition-shadow"
+                        class="surface-card p-4 flex items-center justify-between gap-4 hover:shadow-md transition-shadow"
                     >
                         <div class="flex items-center gap-4 min-w-0">
-                            <span class="text-2xl shrink-0">💬</span>
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 text-[11px] font-extrabold tracking-wider text-brand-700 shrink-0">CHAT</span>
                             <div class="min-w-0">
                                 <h3 class="font-semibold text-gray-900 text-sm">
                                     <a
@@ -93,7 +93,7 @@
         <aside class="w-full lg:w-72 shrink-0 space-y-5">
 
             <!-- Busca -->
-            <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <div class="surface-card p-4">
                 <form action="#" method="get">
                     <label class="sr-only" for="q">Pesquisar</label>
                     <input
@@ -105,9 +105,9 @@
             </div>
 
             <!-- Em Alta -->
-            <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <div class="surface-card p-4">
                 <h2 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-                    <span>🔥</span> Em Alta
+                    <span class="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-amber-100 px-2 text-[10px] font-bold tracking-wide text-amber-700">TOP</span> Em Alta
                 </h2>
                 <ul class="space-y-2">
                     <li th:each="topic : ${trendingTopics}">

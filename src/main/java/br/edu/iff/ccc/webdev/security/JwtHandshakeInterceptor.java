@@ -2,6 +2,7 @@ package br.edu.iff.ccc.webdev.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.Cookie;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -33,7 +34,7 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
             Map<String, Object> attributes) throws Exception {
 
         if (request instanceof ServletServerHttpRequest servletRequest) {
-            String token = servletRequest.getServletRequest().getParameter("token");
+            String token = extractTokenFromCookie(servletRequest);
 
             if (token != null && !token.isBlank()) {
                 try {
@@ -43,8 +44,7 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
                     if (jwtUtil.validateToken(token, userDetails)) {
                         attributes.put("username", username);
                         attributes.put("userDetails", userDetails);
-                        attributes.put("token", token);
-                        
+
                         log.info("WebSocket handshake successful for user: {}", username);
                         return true;
                     }
@@ -58,6 +58,20 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
         }
 
         return false;
+    }
+
+    private String extractTokenFromCookie(ServletServerHttpRequest servletRequest) {
+        Cookie[] cookies = servletRequest.getServletRequest().getCookies();
+        if (cookies == null) {
+            return null;
+        }
+
+        for (Cookie cookie : cookies) {
+            if ("token".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 
     @Override

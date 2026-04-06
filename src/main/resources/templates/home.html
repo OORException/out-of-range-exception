@@ -2,11 +2,11 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/head :: head('Início')}"></head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-slate-800">
 
   <div th:replace="~{fragments/topbar :: topbar}"></div>
 
-  <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+  <main class="flex-1 content-shell w-full px-4 sm:px-6 lg:px-8 py-8">
 
     <!-- Flash messages -->
     <div th:if="${successMessage}" class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700">
@@ -28,14 +28,14 @@
             <a th:href="@{/forum}" class="text-sm text-blue-600 hover:text-blue-700 font-medium">Ver todos →</a>
           </div>
 
-          <div th:if="${#lists.isEmpty(topicCards)}" class="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-500 text-sm">
+          <div th:if="${#lists.isEmpty(topicCards)}" class="surface-card p-8 text-center text-gray-500 text-sm">
             Nenhum tópico encontrado. <a th:href="@{/forum/topics/new}" class="text-blue-600 hover:underline">Crie o primeiro!</a>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <article
               th:each="topic : ${topicCards}"
-              class="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-blue-200 transition-all"
+              class="surface-card p-5 hover:shadow-md hover:border-blue-200 transition-all"
             >
               <a
                 th:href="@{/forum/topics/{id}(id=${topic.id})}"
@@ -62,17 +62,17 @@
         <section>
           <h2 class="text-xl font-bold text-gray-900 mb-4">Chats em Tempo Real</h2>
 
-          <div th:if="${#lists.isEmpty(chatCards)}" class="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-500 text-sm">
+          <div th:if="${#lists.isEmpty(chatCards)}" class="surface-card p-8 text-center text-gray-500 text-sm">
             Nenhum chat ativo no momento.
           </div>
 
           <div class="space-y-3">
             <article
               th:each="chat : ${chatCards}"
-              class="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between gap-4 hover:shadow-md transition-shadow"
+              class="surface-card p-4 flex items-center justify-between gap-4 hover:shadow-md transition-shadow"
             >
               <div class="flex items-center gap-4 min-w-0">
-                <span class="text-2xl shrink-0">💬</span>
+                <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 text-[11px] font-extrabold tracking-wider text-brand-700 shrink-0">CHAT</span>
                 <div class="min-w-0">
                   <h3 class="font-semibold text-gray-900 text-sm">
                     <a
@@ -117,7 +117,7 @@
         </div>
 
         <!-- Ação rápida para autenticados -->
-        <div sec:authorize="isAuthenticated()" class="bg-white rounded-xl border border-gray-200 p-4">
+        <div sec:authorize="isAuthenticated()" class="surface-card p-4">
           <h3 class="font-semibold text-gray-900 mb-3">Ações rápidas</h3>
           <a th:href="@{/forum/topics/new}"
              class="block text-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors mb-2">
@@ -130,9 +130,9 @@
         </div>
 
         <!-- Em Alta -->
-        <div class="bg-white rounded-xl border border-gray-200 p-4">
+        <div class="surface-card p-4">
           <h2 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-            <span>🔥</span> Em Alta
+            <span class="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-amber-100 px-2 text-[10px] font-bold tracking-wide text-amber-700">TOP</span> Em Alta
           </h2>
           <ul class="space-y-2">
             <li th:each="topic : ${trendingTopics}">

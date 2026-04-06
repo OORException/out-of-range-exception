@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Meu Perfil')}"></head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-slate-800">
 
 <div th:replace="~{fragments/topbar :: topbar}"></div>
 
-<main class="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
+<main class="flex-1 content-shell max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
 
   <!-- Flash messages -->
   <div th:if="${successMessage}" class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700">
@@ -15,10 +15,10 @@
     <p th:text="${errorMessage}"></p>
   </div>
 
-  <div class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
+  <div class="surface-card overflow-hidden">
 
     <!-- Header do perfil -->
-    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-10 text-white">
+    <div class="bg-gradient-to-r from-brand-700 to-brand-600 px-8 py-10 text-white">
       <div class="flex flex-col gap-3">
         <p class="text-sm uppercase tracking-[0.25em] text-blue-100">Meu Perfil</p>
         <h1 class="text-3xl sm:text-4xl font-semibold">
@@ -33,26 +33,26 @@
     <div class="p-8">
       <!-- Cards de informação -->
       <div class="grid gap-6 sm:grid-cols-2 mb-8">
-        <div class="rounded-3xl border border-gray-200 p-6 bg-gray-50">
+        <div class="rounded-3xl border border-slate-200 p-6 bg-slate-50/70">
           <p class="text-sm text-gray-500 uppercase tracking-wide">Nome completo</p>
           <p class="mt-2 text-xl font-semibold text-gray-900" th:text="${user.fullName}"></p>
         </div>
-        <div class="rounded-3xl border border-gray-200 p-6 bg-gray-50">
+        <div class="rounded-3xl border border-slate-200 p-6 bg-slate-50/70">
           <p class="text-sm text-gray-500 uppercase tracking-wide">Nome de usuário</p>
           <p class="mt-2 text-xl font-semibold text-gray-900" th:text="'@' + ${user.username}"></p>
         </div>
-        <div class="rounded-3xl border border-gray-200 p-6 bg-gray-50">
+        <div class="rounded-3xl border border-slate-200 p-6 bg-slate-50/70">
           <p class="text-sm text-gray-500 uppercase tracking-wide">E-mail</p>
           <p class="mt-2 text-xl font-semibold text-gray-900" th:text="${user.email}"></p>
         </div>
-        <div class="rounded-3xl border border-gray-200 p-6 bg-gray-50">
+        <div class="rounded-3xl border border-slate-200 p-6 bg-slate-50/70">
           <p class="text-sm text-gray-500 uppercase tracking-wide">Nível</p>
           <p class="mt-2 text-xl font-semibold text-gray-900" th:text="${user.level}"></p>
         </div>
       </div>
 
       <!-- Formulário de edição -->
-      <section class="rounded-3xl border border-gray-200 p-6">
+      <section class="rounded-3xl border border-slate-200 p-6 bg-white/75">
         <h2 class="text-lg font-semibold text-gray-900 mb-5">Editar dados</h2>
 
         <form th:action="@{/profile/edit}" th:object="${profileForm}" method="post" class="space-y-5">
@@ -104,12 +104,12 @@
 
       <!-- Informações extras -->
       <div class="mt-6 grid gap-4 sm:grid-cols-2">
-        <div class="rounded-3xl border border-gray-100 p-5 bg-gray-50">
+        <div class="rounded-3xl border border-slate-200 p-5 bg-slate-50/70">
           <p class="text-xs text-gray-500 uppercase tracking-wide">Conta criada em</p>
           <p class="mt-1 text-sm font-medium text-gray-700"
              th:text="${createdAtFormatted} ?: 'N/A'"></p>
         </div>
-        <div class="rounded-3xl border border-gray-100 p-5 bg-gray-50">
+        <div class="rounded-3xl border border-slate-200 p-5 bg-slate-50/70">
           <p class="text-xs text-gray-500 uppercase tracking-wide">ID de usuário</p>
           <p class="mt-1 text-sm font-medium text-gray-700" th:text="${user.id}"></p>
         </div>

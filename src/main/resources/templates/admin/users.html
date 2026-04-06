@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Admin - Usuários')}"></head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-slate-800">
 <div th:replace="~{fragments/admin-topbar :: adminTopbar}"></div>
-<main class="flex-1 max-w-5xl mx-auto px-4 py-10">
+<main class="flex-1 content-shell max-w-5xl mx-auto px-4 py-10">
   <div class="mb-8">
     <h1 class="text-3xl font-semibold text-gray-900">Administração de Usuários</h1>
     <p class="text-sm text-gray-500 mt-2">Usuários cadastrados na plataforma.</p>
@@ -13,7 +13,7 @@
     <p th:text="${successMessage}"></p>
   </div>
 
-  <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
+  <div class="surface-card p-6">
     <h2 class="text-xl font-semibold text-gray-900 mb-4">Lista de Usuários</h2>
 
     <div th:if="${#lists.isEmpty(users)}" class="text-gray-500">
@@ -21,7 +21,7 @@
     </div>
 
     <div class="overflow-x-auto" th:if="${!#lists.isEmpty(users)}">
-      <table class="w-full text-sm">
+      <table class="w-full text-sm min-w-[720px]">
         <thead>
           <tr class="border-b border-gray-200 text-left">
             <th class="pb-3 font-semibold text-gray-600">ID</th>

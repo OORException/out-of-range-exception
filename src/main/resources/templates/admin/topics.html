@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Admin - Tópicos')}"></head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-slate-800">
 <div th:replace="~{fragments/admin-topbar :: adminTopbar}"></div>
-<main class="flex-1 max-w-5xl mx-auto px-4 py-10">
+<main class="flex-1 content-shell max-w-5xl mx-auto px-4 py-10">
   <div class="mb-8">
     <h1 class="text-3xl font-semibold text-gray-900">Administração de Tópicos</h1>
     <p class="text-sm text-gray-500 mt-2">Cadastre novos tópicos com categoria e tags.</p>
@@ -16,7 +16,7 @@
     <p th:text="${errorMessage}"></p>
   </div>
 
-  <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
+  <div class="surface-card p-6">
     <form th:action="@{/admin/topics}" th:object="${topicForm}" method="post" class="space-y-6">
       <div>
         <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Título <span class="text-red-500">*</span></label>
@@ -59,7 +59,7 @@
       <div>
         <p class="block text-sm font-medium text-gray-700 mb-3">Tags</p>
         <div th:if="${#lists.isEmpty(tags)}" class="text-sm text-gray-400">Nenhuma tag disponível.</div>
-        <div class="grid grid-cols-2 gap-3" th:if="${!#lists.isEmpty(tags)}">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" th:if="${!#lists.isEmpty(tags)}">
           <label th:each="tag : ${tags}" class="flex items-center gap-3 rounded-2xl border border-gray-200 p-3 text-sm text-gray-700 cursor-pointer hover:border-blue-300 transition">
             <input type="checkbox" name="tagIds" th:value="${tag.id}" class="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500" />
             <span th:text="${tag.name}"></span>
