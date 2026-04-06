@@ -4,22 +4,60 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${pageTitle} + ' — FórumOnline'">FórumOnline</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        heading: ['Manrope', 'sans-serif'],
+                        body: ['Source Sans 3', 'sans-serif']
+                    },
                     colors: {
                         brand: {
-                            50:  '#eff6ff',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
+                            50:  '#eef8ff',
+                            100: '#d9efff',
+                            500: '#1f77d0',
+                            600: '#1663ae',
+                            700: '#154f8a',
                         }
                     }
                 }
             }
         }
     </script>
+    <style>
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background:
+                radial-gradient(900px 380px at 0% -20%, rgba(31, 119, 208, 0.13), transparent 60%),
+                radial-gradient(700px 320px at 100% 0%, rgba(20, 184, 166, 0.12), transparent 60%),
+                #f3f6fb;
+            color: #0f172a;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Manrope', sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        .content-shell {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        .surface-card {
+            border: 1px solid #dbe5f2;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 12px 36px -30px rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(2px);
+        }
+    </style>
 </head>
 </html>

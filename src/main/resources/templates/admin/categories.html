@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Admin - Categorias')}"></head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-slate-800">
 <div th:replace="~{fragments/admin-topbar :: adminTopbar}"></div>
-<main class="flex-1 max-w-5xl mx-auto px-4 py-10">
+<main class="flex-1 content-shell max-w-5xl mx-auto px-4 py-10">
   <div class="mb-8">
     <h1 class="text-3xl font-semibold text-gray-900">Administração de Categorias</h1>
     <p class="text-sm text-gray-500 mt-2">Cadastre novas categorias e gerencie as existentes.</p>
@@ -18,7 +18,7 @@
 
   <section class="grid gap-8 lg:grid-cols-2">
     <!-- Formulário nova categoria -->
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
+    <div class="surface-card p-6">
       <h2 class="text-xl font-semibold text-gray-900 mb-4">Nova Categoria</h2>
       <form th:action="@{/admin/categories}" th:object="${categoryForm}" method="post" class="space-y-5">
         <div>
@@ -50,11 +50,11 @@
     </div>
 
     <!-- Lista de categorias -->
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
+    <div class="surface-card p-6">
       <h2 class="text-xl font-semibold text-gray-900 mb-4">Categorias Existentes</h2>
       <div th:if="${#lists.isEmpty(categories)}" class="text-gray-500">Nenhuma categoria cadastrada ainda.</div>
       <ul class="space-y-3" th:if="${!#lists.isEmpty(categories)}">
-        <li th:each="category : ${categories}" class="rounded-2xl border border-gray-200 p-4 flex items-start justify-between gap-3">
+        <li th:each="category : ${categories}" class="rounded-2xl border border-slate-200 p-4 flex items-start justify-between gap-3 bg-white/80">
           <div class="flex-1 min-w-0">
             <div class="font-semibold text-gray-900" th:text="${category.name}"></div>
             <p class="text-sm text-gray-500 mt-1 truncate"
