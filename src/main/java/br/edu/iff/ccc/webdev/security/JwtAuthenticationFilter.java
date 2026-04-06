@@ -3,6 +3,7 @@ package br.edu.iff.ccc.webdev.security;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 username = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
                 logger.warn("Invalid JWT token: " + e.getMessage());
+            }
+        }
+
+        // Fallback: ler JWT do cookie "token" (usado em formulários server-side)
+        if (jwt == null && request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("token".equals(cookie.getName())) {
+                    jwt = cookie.getValue();
+                    try {
+                        username = jwtUtil.extractUsername(jwt);
+                    } catch (Exception e) {
+                        logger.warn("Invalid JWT cookie: " + e.getMessage());
+                        jwt = null;
+                    }
+                    break;
+                }
             }
         }
 

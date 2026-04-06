@@ -56,13 +56,30 @@
           </div>
 
           <!-- Botão do chat -->
-          <a
-            th:if="${chatId != null}"
-            th:href="@{/chat/{id}(id=${chatId})}"
-            class="shrink-0 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
-          >
-            💬 Entrar no Chat
-          </a>
+          <div class="shrink-0 flex flex-col sm:items-end gap-2">
+            <a
+              th:href="@{/forum/topics/new}"
+              class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              + Nova Pergunta
+            </a>
+
+            <a
+              th:if="${chatId != null}"
+              th:href="@{/chat/{id}(id=${chatId})}"
+              class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+            >
+              💬 Entrar no Chat
+            </a>
+
+            <button
+              th:if="${chatId == null}"
+              id="create-chat-btn"
+              class="hidden inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              💬 Criar Chat
+            </button>
+          </div>
         </div>
       </div>
 
@@ -201,65 +218,92 @@
       /*<![CDATA[*/
       (function () {
         const topicId = /*[[${topic.id}]]*/ 0;
-        const token = localStorage.getItem('token');
+        let currentUser = null;
+        let isAuthenticated = false;
+        let isAdmin = false;
 
-        function authHeaders() {
-          return { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+        function jsonHeaders() {
+          return { 'Content-Type': 'application/json' };
         }
 
-        function decodePayload(t) {
+        async function loadCurrentUser() {
           try {
-            return JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
-          } catch { return null; }
+            const res = await fetch('/api/v1/users/me', { headers: { 'Accept': 'application/json' } });
+            if (!res.ok) return null;
+            return await res.json();
+          } catch {
+            return null;
+          }
         }
 
         // ── Autenticação ──────────────────────────────────────────────
-        if (token) {
-          document.getElementById('reply-section')?.classList.remove('hidden');
+        loadCurrentUser().then(user => {
+          currentUser = user;
+          isAuthenticated = !!user;
+          isAdmin = (user?.level === 'ADMIN');
 
-          const payload = decodePayload(token);
-          const currentUserId = payload?.sub ? null : null; // username no sub, id não está no token diretamente
-          const isAdmin = payload?.roles?.includes('ROLE_ADMIN');
+          if (!isAuthenticated) {
+            document.getElementById('login-prompt')?.classList.remove('hidden');
+            return;
+          }
+
+          document.getElementById('login-prompt')?.classList.add('hidden');
+
+          document.getElementById('reply-section')?.classList.remove('hidden');
+          document.getElementById('create-chat-btn')?.classList.remove('hidden');
 
           // Mostrar ações de editar/excluir nos posts do usuário atual
           document.querySelectorAll('.post-actions').forEach(el => {
             const authorId = Number(el.dataset.authorId);
-            // Busca o userId via API
-            fetch('/api/v1/users/me', { headers: authHeaders() })
-              .then(r => r.ok ? r.json() : null)
-              .then(user => {
-                if (!user) return;
-                if (isAdmin || user.id === authorId) {
-                  el.classList.remove('hidden');
-                  el.classList.add('flex');
-                }
-              }).catch(() => {});
+            if (isAdmin || currentUser.id === authorId) {
+              el.classList.remove('hidden');
+              el.classList.add('flex');
+            }
           });
 
           // Carregar estados dos likes
           document.querySelectorAll('.like-btn').forEach(btn => {
             const postId = btn.dataset.postId;
-            fetch('/api/v1/posts/' + postId + '/likes/check', { headers: authHeaders() })
-              .then(r => r.json())
+            fetch('/api/v1/posts/' + postId + '/likes/check')
+              .then(r => r.ok ? r.json() : false)
               .then(liked => {
                 btn.querySelector('.like-icon').textContent = liked ? '❤️' : '🤍';
                 btn.dataset.liked = liked;
               }).catch(() => {});
           });
-        } else {
-          document.getElementById('login-prompt')?.classList.remove('hidden');
-        }
+        });
+
+        // ── Criar chat para o tópico ────────────────────────────────
+        document.getElementById('create-chat-btn')?.addEventListener('click', async () => {
+          if (!isAuthenticated) { window.location.href = '/auth/login'; return; }
+          const btn = document.getElementById('create-chat-btn');
+          btn.disabled = true;
+          btn.textContent = 'Criando chat…';
+          try {
+            const res = await fetch('/api/v1/chats/topic/' + topicId, {
+              method: 'POST',
+              headers: jsonHeaders()
+            });
+            if (!res.ok) throw new Error();
+            const chatId = await res.json();
+            window.location.href = '/chat/' + chatId;
+          } catch {
+            btn.disabled = false;
+            btn.textContent = '💬 Criar Chat';
+            alert('Não foi possível criar o chat para este tópico.');
+          }
+        });
 
         // ── Likes ──────────────────────────────────────────────────────
         document.querySelectorAll('.like-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
-            if (!token) { window.location.href = '/auth/login'; return; }
+            if (!isAuthenticated) { window.location.href = '/auth/login'; return; }
             const postId = btn.dataset.postId;
             const liked = btn.dataset.liked === 'true';
             const method = liked ? 'DELETE' : 'POST';
             try {
               const res = await fetch('/api/v1/posts/' + postId + '/likes', {
-                method, headers: authHeaders()
+                method, headers: jsonHeaders()
               });
               if (!res.ok) return;
               const countEl = document.getElementById('like-count-' + postId);
@@ -295,7 +339,7 @@
           try {
             const res = await fetch('/api/v1/posts', {
               method: 'POST',
-              headers: authHeaders(),
+              headers: jsonHeaders(),
               body: JSON.stringify({ topicId, content })
             });
             if (!res.ok) {
@@ -337,7 +381,7 @@
             try {
               const res = await fetch('/api/v1/posts/' + postId, {
                 method: 'PATCH',
-                headers: authHeaders(),
+                headers: jsonHeaders(),
                 body: JSON.stringify({ content })
               });
               if (!res.ok) throw new Error();
@@ -358,7 +402,7 @@
             try {
               const res = await fetch('/api/v1/posts/' + postId, {
                 method: 'DELETE',
-                headers: authHeaders()
+                headers: jsonHeaders()
               });
               if (res.ok) {
                 document.getElementById('post-' + postId)?.remove();
