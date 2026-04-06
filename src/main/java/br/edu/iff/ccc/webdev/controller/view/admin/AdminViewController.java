@@ -25,6 +25,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
+@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminViewController {
 
@@ -48,7 +49,6 @@ public class AdminViewController {
     }
 
     @PostMapping("/categories")
-    @PreAuthorize("hasRole('ADMIN')")
     public String createCategory(@Valid @ModelAttribute("categoryForm") CategoryForm form,
                                  BindingResult result,
                                  Model model,
@@ -67,7 +67,6 @@ public class AdminViewController {
     }
 
     @PostMapping("/categories/{id}/delete")
-    @PreAuthorize("hasRole('ADMIN')")
     public String deleteCategory(@PathVariable Long id, RedirectAttributes attrs) {
         try {
             adminCategoryService.delete(id);
@@ -91,7 +90,6 @@ public class AdminViewController {
     }
 
     @PostMapping("/tags")
-    @PreAuthorize("hasRole('ADMIN')")
     public String createTag(@Valid @ModelAttribute("tagForm") TagForm form,
                             BindingResult result,
                             Model model,
@@ -110,7 +108,6 @@ public class AdminViewController {
     }
 
     @PostMapping("/tags/{id}/delete")
-    @PreAuthorize("hasRole('ADMIN')")
     public String deleteTag(@PathVariable Long id, RedirectAttributes attrs) {
         try {
             adminTagService.delete(id);
@@ -136,7 +133,6 @@ public class AdminViewController {
     }
 
     @PostMapping("/topics")
-    @PreAuthorize("hasRole('ADMIN')")
     public String createTopic(@Valid @ModelAttribute("topicForm") CreateTopicForm form,
                               BindingResult result,
                               Model model,
@@ -161,7 +157,6 @@ public class AdminViewController {
     }
 
     @PostMapping("/topics/{id}/delete")
-    @PreAuthorize("hasRole('ADMIN')")
     public String deleteTopic(@PathVariable Long id, RedirectAttributes attrs) {
         try {
             topicService.delete(id);

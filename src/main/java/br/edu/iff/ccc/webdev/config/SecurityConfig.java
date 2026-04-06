@@ -68,8 +68,8 @@ public class SecurityConfig {
                 // Todos os outros endpoints de API — requer autenticação
                 .requestMatchers("/api/v1/**").authenticated()
 
-                // Perfil — requer autenticação (protegido via @PreAuthorize)
-                .requestMatchers("/profile/**").permitAll()
+                // Perfil — requer autenticação
+                .requestMatchers("/profile/**").authenticated()
 
                 .anyRequest().authenticated()
             )
