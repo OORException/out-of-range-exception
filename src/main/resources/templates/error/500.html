@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Erro interno')}"></head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+<div th:replace="~{fragments/topbar :: topbar}"></div>
+<main class="flex-1 flex items-center justify-center px-4 py-20">
+  <div class="text-center max-w-md">
+    <div class="text-8xl font-extrabold text-orange-500 mb-4">500</div>
+    <h1 class="text-2xl font-semibold text-gray-900 mb-3">Erro interno do servidor</h1>
+    <p class="text-gray-500 mb-2" th:text="${message != null ? message : 'Ocorreu um erro inesperado. Nossa equipe já foi notificada.'}"></p>
+    <p class="text-gray-400 text-sm mb-8">Por favor, tente novamente em alguns instantes.</p>
+    <a th:href="@{/home}" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">
+      ← Voltar ao início
+    </a>
+  </div>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

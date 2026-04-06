@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Fórum')}"></head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+<div th:replace="~{fragments/topbar :: topbar}"></div>
+
+<main class="flex-1 max-w-6xl mx-auto px-4 py-10 w-full">
+  <div class="flex flex-col lg:flex-row gap-8">
+
+    <!-- Coluna principal: tópicos -->
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Fórum</h1>
+          <p class="text-sm text-gray-500 mt-1">
+            <span th:text="${#lists.size(topics)}">0</span> tópico(s) encontrado(s)
+          </p>
+        </div>
+        <a th:href="@{/forum/topics/new}"
+           class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">
+          + Novo tópico
+        </a>
+      </div>
+
+      <!-- Sem tópicos -->
+      <div th:if="${#lists.isEmpty(topics)}"
+           class="bg-white rounded-2xl border border-gray-200 p-12 text-center">
+        <div class="text-4xl mb-3">💬</div>
+        <p class="text-gray-500 font-medium">Nenhum tópico encontrado.</p>
+        <p class="text-gray-400 text-sm mt-1"
+           th:if="${selectedCategoryId != null}">Tente remover o filtro de categoria.</p>
+        <a th:href="@{/forum/topics/new}"
+           class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">
+          Criar o primeiro tópico
+        </a>
+      </div>
+
+      <!-- Lista de tópicos -->
+      <div class="space-y-3" th:if="${!#lists.isEmpty(topics)}">
+        <a th:each="topic : ${topics}"
+           th:href="@{/forum/topics/{id}(id=${topic.id})}"
+           class="block bg-white rounded-2xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-sm transition-all group">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="inline-block px-2 py-0.5 text-xs font-medium bg-blue-50 text-blue-700 rounded-full"
+                      th:text="${categoryNames[topic.categoryId] ?: 'Geral'}"></span>
+              </div>
+              <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate"
+                  th:text="${topic.title}"></h3>
+              <p class="text-sm text-gray-500 mt-1 line-clamp-2"
+                 th:if="${topic.description != null && !#strings.isEmpty(topic.description)}"
+                 th:text="${topic.description}"></p>
+            </div>
+            <div class="flex-shrink-0 text-right text-xs text-gray-400">
+              <div th:text="${(postCounts[topic.id] ?: 0) + ' resp.'}"></div>
+              <div class="mt-1" th:text="${lastActivityFormatted[topic.id]} ?: ''"></div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Sidebar: categorias -->
+    <aside class="lg:w-64 flex-shrink-0">
+      <div class="bg-white rounded-2xl border border-gray-200 p-5">
+        <h2 class="font-semibold text-gray-900 mb-4">Categorias</h2>
+        <nav class="space-y-1">
+          <a th:href="@{/forum}"
+             th:classappend="${selectedCategoryId == null} ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-50'"
+             class="block px-3 py-2 rounded-xl text-sm transition-colors">
+            Todos os tópicos
+          </a>
+          <a th:each="cat : ${categories}"
+             th:href="@{/forum(categoryId=${cat.id})}"
+             th:text="${cat.name}"
+             th:classappend="${selectedCategoryId != null && selectedCategoryId == cat.id} ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-50'"
+             class="block px-3 py-2 rounded-xl text-sm transition-colors">
+          </a>
+        </nav>
+
+        <div th:if="${#lists.isEmpty(categories)}" class="text-sm text-gray-400">
+          Nenhuma categoria disponível.
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

@@ -2,88 +2,57 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Admin - Usuários')}"></head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
-<div th:replace="~{fragments/topbar :: topbar}"></div>
+<div th:replace="~{fragments/admin-topbar :: adminTopbar}"></div>
 <main class="flex-1 max-w-5xl mx-auto px-4 py-10">
   <div class="mb-8">
     <h1 class="text-3xl font-semibold text-gray-900">Administração de Usuários</h1>
-    <p class="text-sm text-gray-500 mt-2">Veja os usuários cadastrados. Apenas administradores autenticados podem carregar a lista.</p>
+    <p class="text-sm text-gray-500 mt-2">Usuários cadastrados na plataforma.</p>
   </div>
 
   <div th:if="${successMessage}" class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700">
     <p th:text="${successMessage}"></p>
   </div>
-  <div th:if="${errorMessage}" class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700">
-    <p th:text="${errorMessage}"></p>
-  </div>
-
-  <div id="users-error" class="hidden mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700"></div>
 
   <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
     <h2 class="text-xl font-semibold text-gray-900 mb-4">Lista de Usuários</h2>
-    <div id="users-loading" class="text-gray-500">Carregando usuários...</div>
-    <div id="users-empty" class="hidden text-gray-500">Nenhum usuário encontrado.</div>
-    <div id="users-list" class="space-y-3"></div>
+
+    <div th:if="${#lists.isEmpty(users)}" class="text-gray-500">
+      Nenhum usuário cadastrado.
+    </div>
+
+    <div class="overflow-x-auto" th:if="${!#lists.isEmpty(users)}">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 text-left">
+            <th class="pb-3 font-semibold text-gray-600">ID</th>
+            <th class="pb-3 font-semibold text-gray-600">Nome de usuário</th>
+            <th class="pb-3 font-semibold text-gray-600">Nome completo</th>
+            <th class="pb-3 font-semibold text-gray-600">E-mail</th>
+            <th class="pb-3 font-semibold text-gray-600">Nível</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr th:each="user : ${users}" class="hover:bg-gray-50 transition">
+            <td class="py-3 text-gray-400" th:text="${user.id}"></td>
+            <td class="py-3 font-medium text-gray-900" th:text="${user.username}"></td>
+            <td class="py-3 text-gray-700" th:text="${user.fullName}"></td>
+            <td class="py-3 text-gray-500" th:text="${user.email}"></td>
+            <td class="py-3">
+              <span th:if="${user.level.name() == 'ADMIN'}"
+                    class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">
+                Admin
+              </span>
+              <span th:if="${user.level.name() == 'USER'}"
+                    class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                Usuário
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>
-<script>
-  async function loadUsers() {
-    const token = localStorage.getItem('token');
-    const errorEl = document.getElementById('users-error');
-    const loadingEl = document.getElementById('users-loading');
-    const emptyEl = document.getElementById('users-empty');
-    const listEl = document.getElementById('users-list');
-
-    errorEl.classList.add('hidden');
-    emptyEl.classList.add('hidden');
-    listEl.innerHTML = '';
-
-    if (!token) {
-      loadingEl.textContent = 'Você precisa estar autenticado para carregar os usuários.';
-      return;
-    }
-
-    try {
-      const response = await fetch('/api/v1/users', {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      });
-
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        errorEl.textContent = body.message || 'Erro ao carregar os usuários.';
-        errorEl.classList.remove('hidden');
-        loadingEl.classList.add('hidden');
-        return;
-      }
-
-      const users = await response.json();
-      loadingEl.classList.add('hidden');
-
-      if (!Array.isArray(users) || users.length === 0) {
-        emptyEl.classList.remove('hidden');
-        return;
-      }
-
-      users.forEach(user => {
-        const item = document.createElement('div');
-        item.className = 'rounded-2xl border border-gray-200 p-4';
-        item.innerHTML = `
-          <div class="font-semibold text-gray-900">${user.fullName || user.username}</div>
-          <p class="text-sm text-gray-500">Email: ${user.email}</p>
-          <p class="text-sm text-gray-500">Nível: ${user.level}</p>
-        `;
-        listEl.appendChild(item);
-      });
-    } catch (error) {
-      loadingEl.classList.add('hidden');
-      errorEl.textContent = 'Falha de rede ao carregar os usuários.';
-      errorEl.classList.remove('hidden');
-    }
-  }
-
-  loadUsers();
-</script>
 </body>
 </html>

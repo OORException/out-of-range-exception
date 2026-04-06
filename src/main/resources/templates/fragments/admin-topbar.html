@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<th:block th:fragment="adminTopbar">
+<header class="bg-gray-900 text-white sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+
+            <!-- Logo + badge Admin -->
+            <div class="flex items-center gap-6">
+                <a th:href="@{/home}" class="flex items-center gap-2 font-bold text-lg text-white hover:text-gray-300 transition-colors">
+                    <span class="text-xl">💬</span>
+                    <span>FórumOnline</span>
+                </a>
+                <span class="px-2 py-0.5 text-xs font-bold bg-red-600 text-white rounded-full tracking-wide">ADMIN</span>
+
+                <!-- Navegação admin -->
+                <nav class="hidden md:flex items-center gap-1">
+                    <a th:href="@{/admin/categories}"
+                       class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                       Categorias
+                    </a>
+                    <a th:href="@{/admin/tags}"
+                       class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                       Tags
+                    </a>
+                    <a th:href="@{/admin/topics}"
+                       class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                       Tópicos
+                    </a>
+                    <a th:href="@{/admin/users}"
+                       class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                       Usuários
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Ações do lado direito -->
+            <div class="flex items-center gap-3">
+                <a th:href="@{/home}"
+                   class="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                    ← Voltar ao site
+                </a>
+
+                <!-- Menu do usuário -->
+                <div class="relative">
+                    <button id="admin-user-button" type="button"
+                            class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-sm hover:bg-gray-600 transition-colors">
+                        👤
+                    </button>
+                    <div id="admin-user-dropdown"
+                         class="hidden absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-gray-700 bg-gray-800 shadow-lg py-2 z-50">
+                        <div class="px-4 py-2 border-b border-gray-700">
+                            <p class="text-xs text-gray-400">Logado como</p>
+                            <p class="text-sm font-medium text-white" sec:authentication="name">admin</p>
+                        </div>
+                        <a th:href="@{/profile}"
+                           class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                            Meu Perfil
+                        </a>
+                        <form th:action="@{/auth/logout}" method="post" class="block">
+                            <button type="submit"
+                                    class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-700 hover:text-red-300 transition-colors">
+                                Sair
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</header>
+<script>
+    (function () {
+        const logoutForm = document.querySelector('form[action="/auth/logout"]');
+        logoutForm?.addEventListener('submit', function () {
+            localStorage.removeItem('token');
+        });
+
+        const btn = document.getElementById('admin-user-button');
+        const dropdown = document.getElementById('admin-user-dropdown');
+        if (!btn || !dropdown) return;
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+        });
+        document.addEventListener('click', function (e) {
+            if (!btn.contains(e.target)) dropdown.classList.add('hidden');
+        });
+    })();
+</script>
+</th:block>
+</body>
+</html>

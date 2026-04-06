@@ -2,7 +2,7 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Admin - Tópicos')}"></head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
-<div th:replace="~{fragments/topbar :: topbar}"></div>
+<div th:replace="~{fragments/admin-topbar :: adminTopbar}"></div>
 <main class="flex-1 max-w-5xl mx-auto px-4 py-10">
   <div class="mb-8">
     <h1 class="text-3xl font-semibold text-gray-900">Administração de Tópicos</h1>
@@ -17,92 +17,62 @@
   </div>
 
   <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200">
-    <form id="topic-form" class="space-y-6">
+    <form th:action="@{/admin/topics}" th:object="${topicForm}" method="post" class="space-y-6">
       <div>
-        <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Título</label>
-        <input id="title" name="title" required type="text" class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" placeholder="Digite o título do tópico" />
+        <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Título <span class="text-red-500">*</span></label>
+        <input
+          th:field="*{title}"
+          type="text" id="title"
+          class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+          th:classappend="${#fields.hasErrors('title')} ? 'border-red-400' : ''"
+          placeholder="Digite o título do tópico"
+        />
+        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-red-600 text-xs mt-1 block"></span>
       </div>
+
       <div>
         <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
-        <textarea id="description" name="description" rows="4" class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" placeholder="Descrição opcional"></textarea>
+        <textarea
+          th:field="*{description}"
+          id="description" rows="4"
+          class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+          th:classappend="${#fields.hasErrors('description')} ? 'border-red-400' : ''"
+          placeholder="Descrição do tópico (opcional)"
+        ></textarea>
+        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-red-600 text-xs mt-1 block"></span>
       </div>
+
       <div>
-        <label for="categoryId" class="block text-sm font-medium text-gray-700 mb-2">Categoria</label>
-        <select id="categoryId" name="categoryId" required class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+        <label for="categoryId" class="block text-sm font-medium text-gray-700 mb-2">Categoria <span class="text-red-500">*</span></label>
+        <select
+          th:field="*{categoryId}"
+          id="categoryId"
+          class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+          th:classappend="${#fields.hasErrors('categoryId')} ? 'border-red-400' : ''"
+        >
           <option value="">Selecione uma categoria</option>
           <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
         </select>
+        <span th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}" class="text-red-600 text-xs mt-1 block"></span>
       </div>
+
       <div>
         <p class="block text-sm font-medium text-gray-700 mb-3">Tags</p>
-        <div class="grid grid-cols-2 gap-3">
-          <label th:each="tag : ${tags}" class="flex items-center gap-3 rounded-2xl border border-gray-200 p-3 text-sm text-gray-700 cursor-pointer">
-            <input type="checkbox" th:value="${tag.id}" name="tagIds" class="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500" />
+        <div th:if="${#lists.isEmpty(tags)}" class="text-sm text-gray-400">Nenhuma tag disponível.</div>
+        <div class="grid grid-cols-2 gap-3" th:if="${!#lists.isEmpty(tags)}">
+          <label th:each="tag : ${tags}" class="flex items-center gap-3 rounded-2xl border border-gray-200 p-3 text-sm text-gray-700 cursor-pointer hover:border-blue-300 transition">
+            <input type="checkbox" name="tagIds" th:value="${tag.id}" class="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500" />
             <span th:text="${tag.name}"></span>
           </label>
         </div>
       </div>
-      <div id="topic-error" class="hidden text-sm text-red-700"></div>
-      <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition">Salvar Tópico</button>
+
+      <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition">
+        Salvar Tópico
+      </button>
     </form>
   </div>
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>
-<script>
-  document.getElementById('topic-form').addEventListener('submit', async function (event) {
-    event.preventDefault();
-
-    const title = document.getElementById('title').value.trim();
-    const description = document.getElementById('description').value.trim();
-    const categoryId = document.getElementById('categoryId').value;
-    const errorEl = document.getElementById('topic-error');
-
-    errorEl.classList.add('hidden');
-    errorEl.textContent = '';
-
-    if (!categoryId) {
-      errorEl.textContent = 'Selecione uma categoria para o tópico.';
-      errorEl.classList.remove('hidden');
-      return;
-    }
-
-    const tagIds = Array.from(document.querySelectorAll('input[name="tagIds"]:checked')).map(el => Number(el.value));
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      errorEl.textContent = 'Você precisa estar autenticado para cadastrar tópicos.';
-      errorEl.classList.remove('hidden');
-      return;
-    }
-
-    try {
-      const response = await fetch('/api/v1/topics', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-        },
-        body: JSON.stringify({
-          title,
-          description: description || null,
-          categoryId: Number(categoryId),
-          tagIds: tagIds.length ? tagIds : null
-        })
-      });
-
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        errorEl.textContent = body.message || 'Erro ao salvar o tópico.';
-        errorEl.classList.remove('hidden');
-        return;
-      }
-
-      window.location.href = '/admin/topics?successMessage=' + encodeURIComponent('Tópico salvo com sucesso!');
-    } catch (error) {
-      errorEl.textContent = 'Erro de conexão ao salvar o tópico.';
-      errorEl.classList.remove('hidden');
-    }
-  });
-</script>
 </body>
 </html>
