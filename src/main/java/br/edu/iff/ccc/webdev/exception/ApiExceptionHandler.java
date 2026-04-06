@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "br.edu.iff.ccc.webdev.controller.restapi")
 public class ApiExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)

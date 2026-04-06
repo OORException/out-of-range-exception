@@ -1,7 +1,7 @@
 package br.edu.iff.ccc.webdev.config;
 
-import br.edu.iff.ccc.webdev.security.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,11 +17,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
+import br.edu.iff.ccc.webdev.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -35,23 +37,45 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf
+                // Desabilitar CSRF apenas para endpoints de API REST (stateless/JWT)
+                // Manter para endpoints de view (formulários Thymeleaf)
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .ignoringRequestMatchers("/api/**", "/ws/**", "/h2-console/**")
+            )
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
+                // Endpoints públicos de API
+                .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
-                .requestMatchers("/ws/**").permitAll() // WebSocket handshake
-                .requestMatchers("/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**").permitAll()
-                
+                .requestMatchers("/ws/**").permitAll()
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+                // Páginas públicas de view
+                .requestMatchers("/", "/home", "/index").permitAll()
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/forum/**").permitAll()
+                .requestMatchers("/chat/**").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/error/**").permitAll()
+
+                // Admin — requer ROLE_ADMIN para tudo (API e view)
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                // Todos os outros endpoints de API — requer autenticação
                 .requestMatchers("/api/v1/**").authenticated()
-                
+
+                // Perfil — requer autenticação (protegido via @PreAuthorize)
+                .requestMatchers("/profile/**").permitAll()
+
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                // Necessário para CSRF + formulários server-side (admin/auth)
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             )
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -86,7 +110,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

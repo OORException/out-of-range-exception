@@ -7,4 +7,5 @@ import br.edu.iff.ccc.webdev.dto.response.auth.AuthResponse;
 public interface AuthService {
     AuthResponse register(RegisterRequest request);
     AuthResponse login(LoginRequest request);
+    void logout();
 }

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Novo Tópico')}"></head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+  <div th:replace="~{fragments/topbar :: topbar}"></div>
+
+  <main class="flex-1 max-w-2xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
+
+    <div class="mb-6">
+      <a th:href="@{/forum}" class="text-sm text-gray-500 hover:text-gray-700">← Voltar ao fórum</a>
+      <h1 class="text-2xl font-bold text-gray-900 mt-2">Criar Novo Tópico</h1>
+    </div>
+
+    <div th:if="${errorMessage}" class="mb-5 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700"
+         th:text="${errorMessage}"></div>
+    <div th:if="${successMessage}" class="mb-5 p-4 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700"
+         th:text="${successMessage}"></div>
+
+    <form th:action="@{/forum/topics}" th:object="${topicForm}" method="post"
+          class="bg-white rounded-xl border border-gray-200 p-6 space-y-6">
+
+      <!-- Categoria -->
+      <div>
+        <label for="categoryId" class="block text-sm font-medium text-gray-700 mb-1">
+          Categoria <span class="text-red-500">*</span>
+        </label>
+        <select
+          th:field="*{categoryId}"
+          id="categoryId"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          th:classappend="${#fields.hasErrors('categoryId')} ? 'border-red-400' : ''"
+        >
+          <option value="">Selecione uma categoria</option>
+          <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}" class="text-red-600 text-xs mt-1 block"></span>
+      </div>
+
+      <!-- Título -->
+      <div>
+        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
+          Título <span class="text-red-500">*</span>
+        </label>
+        <input
+          th:field="*{title}"
+          type="text" id="title" maxlength="140"
+          placeholder="Descreva o assunto em até 140 caracteres"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          th:classappend="${#fields.hasErrors('title')} ? 'border-red-400' : ''"
+        />
+        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-red-600 text-xs mt-1 block"></span>
+      </div>
+
+      <!-- Descrição -->
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+        <textarea
+          th:field="*{description}"
+          id="description" maxlength="2000" rows="6"
+          placeholder="Detalhe o tópico (opcional)"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
+          th:classappend="${#fields.hasErrors('description')} ? 'border-red-400' : ''"
+        ></textarea>
+        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-red-600 text-xs mt-1 block"></span>
+      </div>
+
+      <!-- Tags -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+        <div th:if="${#lists.isEmpty(tags)}" class="text-xs text-gray-400">Nenhuma tag disponível.</div>
+        <div class="flex flex-wrap gap-2" th:if="${!#lists.isEmpty(tags)}">
+          <label th:each="tag : ${tags}" class="inline-flex items-center gap-1.5 cursor-pointer select-none">
+            <input type="checkbox" name="tagIds" th:value="${tag.id}"
+                   class="hidden peer"
+                   th:checked="${topicForm.tagIds != null && topicForm.tagIds.contains(tag.id)}" />
+            <span th:text="${tag.name}"
+                  class="px-3 py-1 rounded-full text-xs font-medium border transition-colors border-gray-300 text-gray-600 bg-white peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Ações -->
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <a th:href="@{/forum}"
+           class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+          Cancelar
+        </a>
+        <button type="submit"
+                class="px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+          Publicar Tópico
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <div th:replace="~{fragments/footer :: footer}"></div>
+
+  <script>
+    // Toggle visual das tags ao clicar
+    document.querySelectorAll('.flex.flex-wrap label').forEach(label => {
+      label.addEventListener('click', function(e) {
+        const cb = this.querySelector('input[type=checkbox]');
+        const span = this.querySelector('span');
+        // O browser vai mudar o estado do checkbox; usamos setTimeout pra ler após a mudança
+        setTimeout(() => {
+          if (cb.checked) {
+            span.classList.remove('border-gray-300', 'text-gray-600', 'bg-white');
+            span.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+          } else {
+            span.classList.add('border-gray-300', 'text-gray-600', 'bg-white');
+            span.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+          }
+        }, 0);
+      });
+    });
+  </script>
+</body>
+</html>
